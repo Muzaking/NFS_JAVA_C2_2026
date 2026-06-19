@@ -20,6 +20,7 @@ Main.java
 Answer the following questions in your notebook or README.md file:
 
 1. What is the purpose of `Course.java`?
+
 2. What is the purpose of `Instructor.java`?
 3. What is the purpose of `Student.java`?
 4. What does the constructor do?

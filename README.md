@@ -146,3 +146,22 @@ Constructors: Instead of TypeScript's constructor() keyword, Java (like C#) uses
 Self-Reference: To refer to the current instance's variables, Java uses the this keyword (e.g., this.name = name;). This is the exact equivalent of this.name in TypeScript and C#.
 
 Encapsulation: Java enforces strict access modifiers (private, public, protected) directly on each field and method, operating identically to how they work in both TypeScript and C#."
+
+
+
+Day 1 Exercise 02 - Code Explanation
+What changed in Course.java:
+
+Added Fields: Added two new private fields: category (String) and active (boolean) to store the new course data.
+
+Updated Constructor: Modified the constructor parameters to accept the new category and active values and initialized them using the this keyword.
+
+Improved Output: Updated the printSummary() method to print the category. To handle the challenge requirement, I implemented a ternary operator (this.active ? "Active" : "Inactive") to evaluate the boolean flag and print a user-friendly string instead of true or false.
+
+Day 1 Exercise 03 - Code Explanation
+Question: Why is CourseOffering more useful than using only Course when building a real web application?
+
+Answer: Using a CourseOffering class establishes a one-to-many relationship that is vital for real-world database design. The Course acts as a master blueprint (storing static data like the syllabus, title, and total hours). The CourseOffering represents a specific, scheduled event based on that blueprint. If we only used a Course class, we would have to duplicate the entire course description every single time the class is taught on a different date or by a different instructor. By separating them, we keep the backend architecture clean, maintainable, and normalized.
+
+Short note explaining how AI helped you
+AI Assistance Note: I used AI to help debug a Java compilation error related to matching constructor arguments, to verify my object relationships, and to help articulate the database normalization concepts (blueprint vs. instance) for the thinking question.
