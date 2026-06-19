@@ -110,3 +110,39 @@ Participants may use AI tools to:
 
 Participants must always review, verify, test, and understand any AI-generated output. No passwords, API keys, tokens, private keys, or confidential data should be placed into AI prompts.
 
+
+Day 1 Exercise 01 - Code Explanation
+1. What is the purpose of Course.java?
+It defines the blueprint for a Course object. It encapsulates the data (fields like course name, code, or credits) and behaviors (methods like adding students or assigning instructors) specific to a course. Think of these classes as foundational domain models—very similar to the Java entity files you might map out, debug, and compile for a backend Spring Boot service.
+
+2. What is the purpose of Instructor.java?
+It serves as the template for creating Instructor objects. It holds the attributes specific to a teacher (like name, department, or employee ID) and the actions they can perform within the system.
+
+3. What is the purpose of Student.java?
+It provides the structure for Student objects, tracking individual student states (like name, student ID, and enrolled courses) and defining what a student can do.
+
+4. What does the constructor do?
+The constructor initializes a newly created object. When you instantiate an object using the new keyword, the constructor sets up its initial state by allocating memory and assigning default or provided values to the object's fields.
+
+5. Why are the fields marked as private?
+This enforces encapsulation, a core object-oriented programming principle. By making fields private, you restrict direct modification from outside the class, preventing unintended interference or invalid data assignment. Other classes must interact with these fields through controlled, public methods (getters and setters).
+
+6. What does course1.assignInstructor(instructor1); mean?
+This demonstrates an object relationship (specifically, an association). It calls the assignInstructor method on the course1 object and passes the instructor1 object as an argument. This links that specific instructor instance to that specific course instance.
+
+7. What does student1.printProfile(); do?
+This invokes an instance method on the student1 object. It executes the logic defined inside the printProfile method of the Student class, which likely accesses the object's private fields to output a formatted summary of the student's details.
+
+AI-Assisted Task: TypeScript & C# Comparison
+Since you have a choice between TypeScript and C#, here is an explanation focusing heavily on TypeScript, which translates perfectly if you are used to building frontend web applications with frameworks like Angular:
+
+Explanation for a TypeScript or C# Developer:
+"A Java class functions almost identically to a class in TypeScript or C#—it is the blueprint for instantiating objects.
+
+Syntax & Typing: Like TypeScript and C#, Java is statically typed, meaning you must declare the data types for all fields and return values (e.g., String name, int age).
+
+Constructors: Instead of TypeScript's constructor() keyword, Java (like C#) uses a method with the exact same name as the class and no return type. For example, public Student() { ... }.
+
+Self-Reference: To refer to the current instance's variables, Java uses the this keyword (e.g., this.name = name;). This is the exact equivalent of this.name in TypeScript and C#.
+
+Encapsulation: Java enforces strict access modifiers (private, public, protected) directly on each field and method, operating identically to how they work in both TypeScript and C#."
