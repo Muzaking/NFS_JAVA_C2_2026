@@ -6,7 +6,7 @@ import com.fullstack.demo.exception.InvalidCourseException;
 import com.fullstack.demo.model.Course;
 import com.fullstack.demo.model.Instructor;
 import com.fullstack.demo.repository.CourseRepository;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class CourseService {
@@ -105,6 +105,47 @@ public class CourseService {
 
         courseRepository.deleteById(courseId);
     }
+
+    // ====================================================================
+    // --- ASSIGNMENT 05 METHODS: LOOP VS STREAM ---
+    // ====================================================================
+
+    public List<Course> searchByLevelUsingLoop(String level) {
+        String safeLevel = (level == null) ? "" : level.trim();
+        List<Course> results = new ArrayList<>();
+        
+        for (Course course : courseRepository.findAll()) {
+            if (course.getLevel().equalsIgnoreCase(safeLevel)) {
+                results.add(course);
+            }
+        }
+        
+        return results;
+    }
+
+    public List<Course> searchByLevelUsingStream(String level) {
+        String safeLevel = (level == null) ? "" : level.trim();
+        
+        return courseRepository.findAll().stream()
+                .filter(course -> course.getLevel().equalsIgnoreCase(safeLevel))
+                .toList();
+    }
+
+    public List<Course> searchByMinimumDurationUsingLoop(int minimumHours) {
+        List<Course> results = new ArrayList<>();
+        
+        for (Course course : courseRepository.findAll()) {
+            if (course.getDurationHours() >= minimumHours) {
+                results.add(course);
+            }
+        }
+        
+        return results;
+    }
+
+    // ====================================================================
+    // --- PRIVATE HELPER METHODS ---
+    // ====================================================================
 
     private void validateCourse(Course course) {
         if (course == null) {
