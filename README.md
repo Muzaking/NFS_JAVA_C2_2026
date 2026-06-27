@@ -150,3 +150,19 @@ The DOM (Document Object Model) acts as a bridge between HTML and JavaScript. It
 Day 4 Exercise 6
 **How is JavaScript filter used in a search feature?**
 In a search feature, the `.filter()` method is used to scan through an array of objects and check if a specific property (like `studentName`) contains the user's search query. By converting both the source property value and the search input text to lowercase via `.toLowerCase()`, the search feature becomes case-insensitive. `.filter()` outputs a completely new array containing only the matching elements, leaving the original data array untouched. This filtered array is then passed directly to a UI rendering function to dynamically update the view.
+
+Day 4 Exercise 7
+**1. What does async mean?**
+`async` is a keyword used to declare a function that contains asynchronous operations (tasks that take time to finish). It tells JavaScript not to freeze the entire application while waiting for this specific function to complete its work.
+
+**2. What does await do?**
+Used inside an `async` function, `await` forces JavaScript to pause on that specific line of code and wait for the task (like downloading data) to fully finish before moving on to the next line. 
+
+**3. What does fetch do?**
+`fetch` is a built-in JavaScript method used to send network requests to retrieve data from a resource, whether that is a local JSON file or a remote backend API.
+
+**4. Why do we use fetch before connecting to a real backend API?**
+Using `fetch` with a local JSON file allows frontend developers to build, test, and perfect their UI logic (like rendering cards or handling loading states) immediately, without having to wait for the backend server and database to be fully built and connected.
+
+**5. Why should this exercise be run using Live Server?**
+Modern web browsers have strict security policies that block JavaScript from reading files directly from your computer's hard drive (the `file://` protocol). Live Server creates a local development server (`http://127.0.0.1`), allowing `fetch` to work securely just like it would on the real internet.
