@@ -40,20 +40,20 @@ The mock API already has events similar to this:
 
 ```javascript
 let events = [
-  {
-    id: "EV001",
-    title: "Tech Career Fair",
-    date: "2026-08-10",
-    venue: "Kuala Lumpur Convention Centre",
-    availableSeats: 120
-  },
-  {
-    id: "EV002",
-    title: "Web Development Bootcamp",
-    date: "2026-08-15",
-    venue: "Digital Learning Hub",
-    availableSeats: 35
-  }
+    {
+        id: "EV001",
+        title: "Tech Career Fair",
+        date: "2026-08-10",
+        venue: "Kuala Lumpur Convention Centre",
+        availableSeats: 120
+    },
+    {
+        id: "EV002",
+        title: "Web Development Bootcamp",
+        date: "2026-08-15",
+        venue: "Digital Learning Hub",
+        availableSeats: 35
+    }
 ];
 ```
 
@@ -81,12 +81,12 @@ Each booking should have the following fields:
 
 ```javascript
 {
-  id: "BK001",
-  eventId: "EV001",
-  participantName: "Rahim Gonzalez",
-  participantEmail: "rahim@example.com",
-  seats: 2,
-  status: "CONFIRMED"
+    id: "BK001",
+        eventId: "EV001",
+        participantName: "Rahim Gonzalez",
+        participantEmail: "rahim@example.com",
+        seats: 2,
+        status: "CONFIRMED"
 }
 ```
 
@@ -123,8 +123,8 @@ Example error format:
 
 ```javascript
 {
-  field: "seats",
-  message: "Seats must be a whole number greater than 0"
+    field: "seats",
+        message: "Seats must be a whole number greater than 0"
 }
 ```
 
@@ -380,7 +380,7 @@ Your submission is complete when:
 
 ---
 
-## Challenge Task
+## Optional Task: DELETE Endpoint
 
 Add this endpoint:
 
@@ -418,7 +418,7 @@ Do not physically remove the booking from the array.
 Submit:
 
 1. Your updated `mock-api.js`
-2. Your `.http` test file
+2. Optional: Your `.http` test file
 3. A short note explaining which endpoints you completed
 
 ---
