@@ -5,7 +5,6 @@ import com.fullstack.demo.exception.InvalidStudentException;
 import com.fullstack.demo.exception.StudentNotFoundException;
 import com.fullstack.demo.model.Student;
 import com.fullstack.demo.repository.StudentRepository;
-
 import java.util.ArrayList;
 import java.util.List;
 

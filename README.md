@@ -110,7 +110,7 @@ Participants may use AI tools to:
 
 Participants must always review, verify, test, and understand any AI-generated output. No passwords, API keys, tokens, private keys, or confidential data should be placed into AI prompts.
 
-# Day 5 Exercise 5.1: HTTP Investigation
+# Day 5 Exercise 1: HTTP Investigation
 
 ## 1. Investigation Table
 
@@ -149,7 +149,7 @@ Status codes give frontend developers an immediate, standardized way to check if
 I have a much clearer understanding of how HTTP methods (GET, POST) and Status Codes work together as a standardized communication language. Instead of every API responding in its own unique way, REST relies on predictable status codes (like 200, 201, 400, 404) to instantly tell the frontend exactly what happened, making it much easier to write reliable application logic.
 
 
-# Day 5 Exercise 5.2: REST API Design
+# Day 5 Exercise 2: REST API Design
 
 ## 1. API Specification Table
 
@@ -190,3 +190,28 @@ I have a much clearer understanding of how HTTP methods (GET, POST) and Status C
 My endpoint names strictly follow REST principles because they use **nouns** representing the resources (`/events`, `/bookings`) rather than **verbs** representing actions (like `/getAllEvents` or `/cancelBooking`). 
 
 In REST, the URL should only identify *what* you are interacting with. The *action* you want to perform is dictated entirely by the HTTP method used (`GET` to read, `POST` to create, `DELETE` to remove). Using path variables like `/{eventId}` cleanly identifies a specific resource within a collection without needing messy action URLs.
+
+# Day 5 Exercise 5: Booking API Mock Server
+
+## Submission Note
+
+I have successfully completed and tested all core and optional endpoints for the Booking API in `mock-api.js`.
+
+### Completed Endpoints:
+
+* **`GET /api/bookings`**
+  * Successfully retrieves the array of all current bookings.
+
+* **`GET /api/bookings/{id}`**
+  * Retrieves a specific booking by its ID or returns a `404 Not Found` status if it does not exist.
+
+* **`POST /api/bookings`**
+  * Includes full validation for incoming JSON data (checks for missing fields and valid seat numbers).
+  * Validates that the target Event ID exists (returns `404` if not).
+  * Verifies there is sufficient seat capacity before booking (returns `400` if not enough seats).
+  * Accurately reduces the `availableSeats` in the associated event upon a successful `201 Created` response.
+
+* **`DELETE /api/bookings/{id}` (Optional Challenge Task)**
+  * Successfully changes a booking's status to `"CANCELLED"`.
+  * Automatically returns the cancelled seats back to the total available capacity for the associated event.
+  * Includes validation to prevent duplicate cancellation attempts on the same booking.
