@@ -20,7 +20,7 @@ Before building ticket endpoints, you need to prove that your Spring Boot applic
 
 ## Project
 
-Use your student project:
+Use project:
 
 ```text
 support-desk-api
