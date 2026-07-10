@@ -1,11 +1,11 @@
 package com.example.assettracker.controller;
 
+import com.example.assettracker.dto.CreateTicketRequest; // ADDED
 import com.example.assettracker.dto.TicketResponse;
 import com.example.assettracker.service.TicketService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable; // ADDED: Required to read the URL
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid; // ADDED
+import org.springframework.http.HttpStatus; // ADDED
+import org.springframework.web.bind.annotation.*; // Covers GetMapping, PostMapping, PathVariable, RequestBody, ResponseStatus
 
 import java.util.List;
 
@@ -24,9 +24,15 @@ public class TicketController {
         return ticketService.getAllTickets();
     }
 
-    // ADDED: New endpoint to get a single ticket by its ID
     @GetMapping("/tickets/{id}")
     public TicketResponse getTicket(@PathVariable String id) {
         return ticketService.getTicketById(id);
+    }
+
+    // ADDED: POST endpoint to create tickets
+    @PostMapping("/tickets")
+    @ResponseStatus(HttpStatus.CREATED) // Forces a 201 Created status instead of 200 OK
+    public TicketResponse createTicket(@Valid @RequestBody CreateTicketRequest request) {
+        return ticketService.createTicket(request);
     }
 }
