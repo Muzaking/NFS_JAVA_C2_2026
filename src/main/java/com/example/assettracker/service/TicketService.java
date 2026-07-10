@@ -1,6 +1,7 @@
 package com.example.assettracker.service;
 
 import com.example.assettracker.dto.TicketResponse;
+import com.example.assettracker.exception.ResourceNotFoundException; // ADDED: Import for the 404 exception
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,5 +21,13 @@ public class TicketService {
 
     public List<TicketResponse> getAllTickets() {
         return tickets;
+    }
+
+    // ADDED: New method to find a specific ticket by ID or throw our custom exception
+    public TicketResponse getTicketById(String id) {
+        return tickets.stream()
+                .filter(ticket -> ticket.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Ticket " + id + " was not found"));
     }
 }
