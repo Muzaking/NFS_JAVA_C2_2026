@@ -38,3 +38,6 @@ Content-Type: application/json
   "serialNumber": "",
   "location": ""
 }
+
+### Get All Tickets
+GET http://localhost:8080/api/tickets
