@@ -4,6 +4,8 @@ import com.example.assettracker.dto.AssetResponse;
 import com.example.assettracker.dto.CreateAssetRequest;
 import com.example.assettracker.service.AssetService;
 import jakarta.validation.Valid;
+
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -37,8 +40,22 @@ public class AssetController {
 
     // GET /api/assets -> returns all assets
     @GetMapping
-    public List<AssetResponse> getAllAssets() {
-        return assetService.getAllAssets();
+    public List<AssetResponse> getAssets(
+        @RequestParam(required = false) String status,
+        @RequestParam(required = false) String category,
+        @RequestParam(required = false) String location
+    ) {
+        return assetService.getAssets(status, category, location);
+    }
+
+    @GetMapping("/paged")
+    public Page<AssetResponse> getAssetsPaged(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "5") int size,
+        @RequestParam(defaultValue = "assetTag") String sortBy,
+        @RequestParam(defaultValue = "asc") String direction
+    ) {
+        return assetService.getAssetsPaged(page, size, sortBy, direction);
     }
 
     // GET /api/assets/{id} -> returns a single asset by id

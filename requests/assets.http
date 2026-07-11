@@ -14,6 +14,24 @@ GET http://localhost:8080/api/assets/REPLACE_WITH_REAL_ID
 ### Get missing asset
 GET http://localhost:8080/api/assets/000000000000000000000000
 
+### Filter assets by status
+GET http://localhost:8080/api/assets?status=AVAILABLE
+
+#### Filter assets by category
+GET http://localhost:8080/api/assets?category=Phone
+
+### Filter assets by location
+GET http://localhost:8080/api/assets?location=HQ%20Level%67
+
+### Get paged assets
+GET http://localhost:8080/api/assets/paged?page=0&size=5
+
+### Get paged assets sorted by name in descending order
+GET http://localhost:8080/api/assets/paged?page=0&size=5&sortBy=name&direction=desc
+
+### Get paged assets sorted by category in ascending order
+GET http://localhost:8080/api/assets/paged?page=0&size=5&sortBy=category&direction=asc
+
 
 ### Create a valid asset
 POST http://localhost:8080/api/assets
