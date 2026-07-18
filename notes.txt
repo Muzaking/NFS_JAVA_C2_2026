@@ -30,9 +30,7 @@ Repo perform db search
 
 Spring Data MongoDB
 
-========================================================================
-
-DAY 9: Authentication & Authorisation
+=====================================DAY 9: Authentication & Authorisation=====================================
 
 Day 7: MongoDB
 Day 8: queries, pagination, indexes, logging, handing duplicates
@@ -81,3 +79,58 @@ ADMIN = view and create assets
 
 Seed an admin user
 Normal registration creates USER account only
+
+
+
+===================================== Day 10: API Quality: Versioning, Docs, Aggregation =====================================
+
+What does API quality mean?
+An API is not only good because it works. It's good when it is:
+    1. Predictable
+    2. secure
+    3. Documented
+    4. Versioned
+    5. Tesable
+    6. Consistent
+
+VERSIONING
+Means putting a version number in the API path
+/api/v1/assets
+This allows future changes without immediately breaking older clients
+
+DOCUMENTATION
+Documentation tell devs:
+1. What endpoints exist?
+2. What method to use?
+3. What authentication is needed?
+4. What does each endpoint do?
+JSON documentation endpoint
+GET /api/docs
+
+AGGREGATION
+Means asking the db to calculate a summary
+Example: Count number of assets by status 
+Instead of downloading every asset and counting in JavaScript, MongoDB groups and count the records
+
+ERROR CONTRACT
+A good API should return consistent errors
+{
+    "message": "Error message goes here", 
+    "status": 400, 
+    "timestamp": "YYYY-MM-DD-HH-mm-ss"
+    "errors": []
+}
+
+Milestone 1
+By the end of day 10, our backed should now have:
+1. MongoDB persistence
+2. CRUD
+3. Filtering
+4. pagination
+5. Sorting
+6. Indexes
+7. Duplicate handling
+8. JWT auth
+9. RBAC
+19. Versioned routes
+11. Docs endpoint
