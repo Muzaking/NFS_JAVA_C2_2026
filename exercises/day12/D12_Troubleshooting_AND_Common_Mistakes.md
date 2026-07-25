@@ -214,7 +214,7 @@ Also remember:
 The real protection is ProtectedRoute. Even if the browser goes back, ProtectedRoute should redirect again if auth state is cleared.
 ```
 
-## 12. Students confuse frontend routes and backend APIs
+## 12. Confusion between frontend routes and backend APIs
 
 ### Explain clearly
 
@@ -232,7 +232,7 @@ Backend API:
 /api/v1/assets
 ```
 
-Teaching phrase:
+Main takeaway:
 
 ```text
 Frontend routes show screens. Backend API routes return data.
