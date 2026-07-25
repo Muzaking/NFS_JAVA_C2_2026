@@ -109,14 +109,14 @@ GET /api/docs
 
 AGGREGATION
 Means asking the db to calculate a summary
-Example: Count number of assets by status 
+Example: Count number of assets by status
 Instead of downloading every asset and counting in JavaScript, MongoDB groups and count the records
 
 ERROR CONTRACT
 A good API should return consistent errors
 {
-    "message": "Error message goes here", 
-    "status": 400, 
+    "message": "Error message goes here",
+    "status": 400,
     "timestamp": "YYYY-MM-DD-HH-mm-ss"
     "errors": []
 }
@@ -134,3 +134,113 @@ By the end of day 10, our backed should now have:
 9. RBAC
 19. Versioned routes
 11. Docs endpoint
+
+
+
+===================================== Day 11: React Basics =====================================
+
+Component
+A component is a reusable piece of UI.
+
+Example:
+function StatusBadge({ status }) {
+  return <span>{status}</span>;
+}
+
+
+JSX
+JSX lets us write UI inside JavaScript.
+It looks similar to HTML, but it is JavaScript syntax.
+
+Props
+Props are inputs passed from a parent component to a child component.
+<StatusBadge status="AVAILABLE" />
+
+Inside the child:
+
+function StatusBadge({ status }) {
+  return <span>{status}</span>;
+}
+
+State
+data that can change while the app is running.
+
+const [selectedAsset, setSelectedAsset] = useState(null);
+
+When state changes, React updates the UI.
+
+useEffect
+
+`useEffect` is used for side effects.
+
+Examples:
+- API calls
+- reading local storage
+- setting up timers
+- syncing with external systems
+
+For Day 11, we use it to load public API information from the backend.
+
+Loading, error, empty and success states
+Professional UIs do not only show successful data.
+They also show:
+
+loading: data is being requested
+error: something failed
+empty: request succeeded but no data is available
+success: data is available
+
+
+Component tree
+shows how components are arranged.
+Example:
+
+App
+├── Layout
+├── SummaryCards
+├── FilterPanel
+└── AssetList
+
+
+===================================== Day 12: Routing & Protected Views =====================================
+
+Components on one screen -> components organised as pages
+
+What is routing?
+Deciding what UI to show based on the browser URL
+/login          Login page
+/docs           API documentation
+/app/dashboard  DASHBOARD
+/app/assets     List of assets
+
+In React, these pages are still components
+So routing in reality URL path -> React component 
+
+Traditional Routing vs React SPA Routing
+Traditional Website
+1. USer click a link
+2, Browser requests new HTML page from the Server
+3. Server send full HTML page
+4. Brower reloads the page
+
+REACT SPA
+User clicks link
+React Router updates the browser URL
+React changes the component shown
+The page does not fully reload
+
+BrowserRouter
+This activates routing for the app
+It uses the browser History API so the app can respond to URL changes
+main.jsx wraps the whole app
+App.jsx defines the routes
+
+    <BrowserRouter>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </BrowserRouter>
+
+Routes and Route
+Routes is the route container
+Route defines one URL
