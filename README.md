@@ -110,3 +110,17 @@ Participants may use AI tools to:
 
 Participants must always review, verify, test, and understand any AI-generated output. No passwords, API keys, tokens, private keys, or confidential data should be placed into AI prompts.
 
+
+
+Day 6 Exercise 5: Create an HTTP Test File
+### API Endpoint Test Results
+
+All 7 endpoints were tested successfully via the `day06-tickets.http` file. The server handled both happy-path requests and error-handling scenarios exactly as expected.
+
+* **GET `/api/health`** - Returned `200 OK`
+* **GET `/api/about`** - Returned `200 OK`
+* **GET `/api/tickets`** - Returned `200 OK` (Returned full array of tickets)
+* **GET `/api/tickets/T001`** - Returned `200 OK` (Successfully fetched existing ticket)
+* **GET `/api/tickets/T999`** - Returned `404 Not Found` (Properly intercepted by global exception handler)
+* **POST `/api/tickets` (Valid Request)** - Returned `201 Created` (Generated new ticket with ID and default status)
+* **POST `/api/tickets` (Invalid Request)** - Returned `400 Bad Request` (Blank fields were successfully caught by `@Valid` and returned appropriate error messages)
