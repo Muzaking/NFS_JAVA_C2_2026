@@ -10,7 +10,9 @@ Content-Type: application/json
   "password": "Admin@12345"
 }
 
-@token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBRE1JTiIsImlzcyI6ImFzc2V0LXRyYWNrZXItYXBpIiwibmFtZSI6IkFkbWluIFVzZXIiLCJleHAiOjE3ODU0NzI1NjcsImlhdCI6MTc4NTQ2ODk2NywidXNlcklkIjoiNmE1OWFjNmU2NjI3NTNjYjY0MjhhZDk1In0.XyPUhO6ZOeuw4Utbyj4cbRPLXzC_DooCuLn5F6clB-I
+
+### Copy token from login response
+@token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBRE1JTiIsImlzcyI6ImFzc2V0LXRyYWNrZXItYXBpIiwibmFtZSI6IkFkbWluIFVzZXIiLCJleHAiOjE3ODM1MjQ5ODIsImlhdCI6MTc4MzUyMTM4MiwidXNlcklkIjoiNmE0ZTMyMDBjYjFjNGU0ZDk4NTQ1M2MyIn0.xgHsbJzYb6VntgtKkjWc6FXl2kVeDbpOixNAB22eL38
 
 
 ### Create asset from frontend form
@@ -31,7 +33,9 @@ Authorization: Bearer {{token}}
 GET http://localhost:8080/api/v1/assets
 Authorization: Bearer {{token}}
 
-PUT http://localhost:8080/api/v1/assets/6a51e259429ab6fe53a381b6
+
+### Update asset from frontend form
+PUT http://localhost:8080/api/v1/assets/6a4e1056bd4000ca7cd48975
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -45,7 +49,9 @@ Authorization: Bearer {{token}}
   "assignedTo": "trainer@example.com"
 }
 
-PUT http://localhost:8080/api/v1/assets/6a51e259429ab6fe53a381b6
+
+### Invalid update status - should return 400
+PUT http://localhost:8080/api/v1/assets/6a4e1056bd4000ca7cd48975
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
