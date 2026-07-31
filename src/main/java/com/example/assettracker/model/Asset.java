@@ -106,6 +106,5 @@ public class Asset {
 
     public void setAssignedTo(String assignedTo) {
         this.assignedTo = assignedTo;
-        
     }
 }
