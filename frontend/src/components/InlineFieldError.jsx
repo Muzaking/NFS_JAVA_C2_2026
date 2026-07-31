@@ -1,7 +1,7 @@
 export default function InlineFieldError({ message }) {
-    if (!message) {
-        return null;
-    }
+  if (!message) {
+    return null;
+  }
 
-    return <span className="field-error" role="alert"> {message} </span>;
+  return <span className="field-error" role="alert">{message}</span>;
 }
