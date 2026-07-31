@@ -244,3 +244,24 @@ App.jsx defines the routes
 Routes and Route
 Routes is the route container
 Route defines one URL
+
+
+
+===================================== Day 13: Forms & Validation =====================================
+Controlled inputs
+  An input where React controls the displayed value
+
+  const [name, setName] = useState('');
+  <input 
+    value={name}
+    onChange...
+  />
+
+  Uncontrolled inputs
+  keeps the current value inside the browser DOM. React does not update state every time the value changes.
+
+  const const1 = useRef(null)
+  <input type="checkbox" ref={const1} />
+
+  const isChecked = const1.current?.checked;
+

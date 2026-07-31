@@ -68,4 +68,14 @@ public class CreateAssetRequest {
     public void setLocation(String location) {
         this.location = location;
     }
+
+    public Object getAssignedTo() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getAssignedTo'");
+    }
+
+    public String getStatus() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getStatus'");
+    }
 }

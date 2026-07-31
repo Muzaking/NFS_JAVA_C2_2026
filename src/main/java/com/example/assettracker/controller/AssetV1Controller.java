@@ -2,6 +2,7 @@ package com.example.assettracker.controller;
 
 import com.example.assettracker.dto.AssetResponse;
 import com.example.assettracker.dto.CreateAssetRequest;
+import com.example.assettracker.dto.UpdateAssetRequest;
 import com.example.assettracker.service.AssetService;
 import jakarta.validation.Valid;
 
@@ -19,13 +20,14 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Set;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 @RequestMapping("/api/v1/assets")
 public class AssetV1Controller {
 
-    private static final Set<String> ALLOWED_SORT_FIELDS = 
-            Set.of("assetTag", "name", "status", "category", "location", "serialNumber", "purchaseDate", "updateDate");
+    
 
     // Constructor injection is the recommended way to get dependencies in Spring.
     private final AssetService assetService;
@@ -51,25 +53,9 @@ public class AssetV1Controller {
         @RequestParam(defaultValue = "assetTag") String sortBy,
         @RequestParam(defaultValue = "asc") String direction
     ) {
-        if (page < 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Page index must be more or equal to 0");
-        }
-
-        if (size < 1 || size > 50) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Page size must between 1 and 50");
-        }
-
-        if (sortBy == null || sortBy.isBlank() || !ALLOWED_SORT_FIELDS.contains(sortBy)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid sort field. Allowed fields are: " + ALLOWED_SORT_FIELDS);
-        }
-
-        String normalisedDirection = direction.toLowerCase();
-        if (!Set.of("asc", "desc").contains(normalisedDirection)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Sort direction must be either 'asc' or 'desc'");
-        }
-
         return assetService.getAssetsPaged(page, size, sortBy, direction);
     }
+    
 
     // GET /api/v1/assets/{id} -> returns a single asset by id
     @GetMapping("/{id}")
@@ -83,5 +69,12 @@ public class AssetV1Controller {
         AssetResponse created = assetService.createAsset(request);
         // Return 201 Created with the created asset in the body
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+
+    @PutMapping("/{id}")
+    public AssetResponse updateAsset(
+            @PathVariable String id, 
+            @Valid @RequestBody UpdateAssetRequest request) {
+        return assetService.updateAsset(id, request);
     }
 }
