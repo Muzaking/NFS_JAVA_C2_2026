@@ -148,19 +148,133 @@ function assetReducer(state, action) {
 }
 
 function toUpdatePayload(asset) {
-
+  return {
+    assetTag: asset.assetTag,
+    name: asset.name,
+    category: asset.category,
+    serialNumber: asset.serialNumber,
+    status: asset.status,
+    location: asset.location,
+    assignedTo: asset.assignedTo ?? ''
+  };
 }
 
 export function AssetDataProvider({ children }) {
+  const { token } = useAuth();
+  const [state, dispatch] = useReducer(assetReducer, initialState);
 
+  const loadAssetsPage = useCallback(async (overrides = {}) => {
+    const params = {
+      page: overrides.page ?? state.pageInfo.page,
+      size: overrides.size ?? state.pageInfo.size,
+      sortBy: overrides.sortBy ?? state.pageInfo.sortBy,
+      direction: overrides.direction ?? state.pageInfo.direction
+    };
+
+    const cacheKey = makeCacheKey(params);
+    const cachedPage = state.cache[cacheKey];
+
+    if (cachedPage && !overrides.force) {
+      dispatch({
+        type: 'LOAD_SUCCESS',
+        data: cachedPage,
+        params,
+        cacheKey,
+        fromCache: true
+      });
+      return;
+    }
+
+    dispatch({ type: 'LOAD_START', fromCache: false });
+
+    try {
+      const data = await fetchPagedAssets(token, params);
+      dispatch({
+        type: 'LOAD_SUCCESS',
+        data,
+        params,
+        cacheKey,
+        fromCache: false
+      });
+    } catch (error) {
+      dispatch({
+        type: 'LOAD_ERROR',
+        message: error.message || 'Could not load paged assets.'
+      });
+    }
+  }, [state.cache, state.pageInfo, token]);
+
+  const refreshAssets = useCallback(() => {
+    return loadAssetsPage({ force: true });
+  }, [loadAssetsPage]);
+
+  const setSearchText = useCallback((value) => {
+    dispatch({ type: 'SET_SEARCH_TEXT', value });
+  }, []);
+
+  const setStatusFilter = useCallback((value) => {
+    dispatch({ type: 'SET_STATUS_FILTER', value });
+  }, []);
+
+  const selectAsset = useCallback((assetId) => {
+    dispatch({ type: 'SELECT_ASSET', assetId });
+  }, []);
+
+  const changeAssetStatus = useCallback(async (assetId, nextStatus) => {
+    const currentAsset = state.items.find((asset) => asset.id === assetId);
+
+    if (!currentAsset || currentAsset.status === nextStatus) {
+      return;
+    }
+
+    const optimisticAsset = { ...currentAsset, status: nextStatus };
+    dispatch({ type: 'OPTIMISTIC_UPDATE', asset: optimisticAsset });
+
+    try {
+      const savedAsset = await updateAsset(assetId, token, toUpdatePayload(optimisticAsset));
+      dispatch({ type: 'UPDATE_SUCCESS', asset: savedAsset });
+    } catch (error) {
+      dispatch({
+        type: 'ROLLBACK_UPDATE',
+        asset: currentAsset,
+        message: error.message || 'Could not update asset status. Reverted local change.'
+      });
+    }
+  }, [state.items, token]);
+
+  const visibleAssets = useMemo(
+    () => filterAssets(state.items, state.filters.searchText, state.filters.statusFilter),
+    [state.items, state.filters]
+  );
+
+  const selectedAsset = useMemo(() => {
+    return visibleAssets.find((asset) => asset.id === state.selectedAssetId) ?? visibleAssets[0] ?? null;
+  }, [state.selectedAssetId, visibleAssets]);
+
+  const value = useMemo(
+    () => ({
+      ...state,
+      visibleAssets,
+      selectedAsset,
+      loadAssetsPage,
+      refreshAssets,
+      setSearchText,
+      setStatusFilter,
+      selectAsset,
+      changeAssetStatus
+    }),
+    [state, visibleAssets, selectedAsset, loadAssetsPage, refreshAssets, setSearchText, setStatusFilter, selectAsset, changeAssetStatus]
+  );
+
+  return <AssetDataContext.Provider value={value}>{children}</AssetDataContext.Provider>;
 }
 
 export function useAssetData() {
-    const value = useContext(AssetDataContext);
-    
-    if (!value) {
-        throw new Error('useAssetData must be used within an AssetDataProvider');
-    }
+  const value = useContext(AssetDataContext);
 
-    return value;
+  if (!value) {
+    throw new Error('useAssetData must be used inside AssetDataProvider');
+  }
+
+  return value;
 }
