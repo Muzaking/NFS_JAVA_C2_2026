@@ -67,3 +67,57 @@ Content-Type: application/json
   "serialNumber": "SN-CAM-1001",
   "location": "HQ Level 2"
 }
+
+### ---------------------------
+### TICKET API TESTS (DAY 7)
+### ---------------------------
+
+### 1. Get all tickets from MongoDB
+GET http://localhost:8080/api/tickets
+
+
+### 2. Get one ticket by ID
+# IMPORTANT: Run the "Get all tickets" request above first. 
+# Look at the JSON response, copy the 24-character "id", and replace YOUR_REAL_TICKET_ID below!
+GET http://localhost:8080/api/tickets/YOUR_REAL_TICKET_ID
+
+
+### 3. Get missing ticket (Should return 404 Not Found)
+GET http://localhost:8080/api/tickets/000000000000000000000000
+
+### 4. Create a valid ticket (Day 7 Exercise 4)
+POST http://localhost:8080/api/tickets
+Content-Type: application/json
+
+{
+  "title": "Cannot access email",
+  "description": "User cannot login to company email account.",
+  "category": "Email",
+  "priority": "HIGH",
+  "createdBy": "amir@example.com"
+}
+
+
+### 5. Create an invalid ticket (Should return 400 Bad Request)
+POST http://localhost:8080/api/tickets
+Content-Type: application/json
+
+{
+  "title": "",
+  "description": "",
+  "category": "",
+  "priority": "",
+  "createdBy": ""
+}
+
+### Day 8: Get all tickets (No filters)
+GET http://localhost:8080/api/tickets
+
+### Day 8: Filter tickets by Status
+GET http://localhost:8080/api/tickets?status=OPEN
+
+### Day 8: Filter tickets by Priority
+GET http://localhost:8080/api/tickets?priority=HIGH
+
+### Day 8: Filter tickets by Category
+GET http://localhost:8080/api/tickets?category=Email
