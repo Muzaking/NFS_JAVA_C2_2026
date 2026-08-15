@@ -146,3 +146,34 @@ The `POST /api/tickets` endpoint successfully creates and saves new tickets dire
 * Sending a valid JSON request returns a `201 Created` response containing the mapped Response DTO, which includes a newly generated MongoDB `ObjectId` (e.g., `"6a67ba..."`), an auto-generated timestamp for `createdAt`, and the default status of `"OPEN"`.
 * Sending an invalid JSON body triggers the `@Valid` annotations and successfully returns a `400 Bad Request` without attempting to save to the database.
 * **Database Verification:** I verified via MongoDB Compass that the new document is successfully persisted in the `support_desk_db` database inside the `tickets` collection.
+
+## Day 7 Exercise 5: Persistence Checkpoint
+
+### Persistence Test Confirmation
+I successfully confirmed that the Support Desk API permanently stores data in MongoDB, replacing the volatile in-memory list.
+
+**Test Steps & Results:**
+* Started MongoDB and the Spring Boot application.
+* Sent a `POST /api/tickets` request to create a new ticket (Title: "Cannot access email").
+* **Ticket ID Created:** `6a7fe86428597028693ca714`
+* Sent a `GET /api/tickets` request and verified the ticket appeared in the list.
+* Stopped the Spring Boot application server completely.
+* Restarted the Spring Boot application.
+* Sent another `GET /api/tickets` request. 
+* **Confirmation:** The ticket with ID `6a7fe86428597028693ca714` was still present in the response array, proving successful data persistence.
+
+---
+
+### Reflection Questions
+
+**1. What is the role of the repository?**
+The repository acts as the bridge (or data access layer) between the Spring Boot application and the MongoDB database. By extending `MongoRepository`, it provides built-in methods for standard CRUD (Create, Read, Update, Delete) operations, allowing the application to interact with the database using standard Java methods instead of writing raw database query language.
+
+**2. What is the difference between Ticket and TicketResponse?**
+`Ticket` is the internal database model (Entity) representing exactly how the data is mapped and stored inside MongoDB. `TicketResponse` is a Data Transfer Object (DTO) used to define exactly what data is sent back to the client over the network. Using a DTO prevents exposing sensitive internal database fields and allows us to format data (like converting Date objects to Strings) before the client sees it.
+
+**3. What does MongoDB store as the document ID?**
+MongoDB automatically generates and stores a 24-character hexadecimal string called an `ObjectId`. In the database document, this is stored under the exact field name `_id`. 
+
+**4. Why should the controller not talk directly to MongoDB?**
+This violates the "Separation of Concerns" design principle. The Controller's only job should be receiving HTTP requests and sending HTTP responses. If it talks directly to the database, business logic gets tangled with routing logic, making the application extremely difficult to test, maintain, and scale. By routing data through a Service layer to the Repository, we keep the architecture clean and modular.
