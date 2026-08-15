@@ -56,3 +56,28 @@ GET http://localhost:8080/api/tickets/YOUR_REAL_TICKET_ID
 
 ### 3. Get missing ticket (Should return 404 Not Found)
 GET http://localhost:8080/api/tickets/000000000000000000000000
+
+### 4. Create a valid ticket (Day 7 Exercise 4)
+POST http://localhost:8080/api/tickets
+Content-Type: application/json
+
+{
+  "title": "Cannot access email",
+  "description": "User cannot login to company email account.",
+  "category": "Email",
+  "priority": "HIGH",
+  "createdBy": "amir@example.com"
+}
+
+
+### 5. Create an invalid ticket (Should return 400 Bad Request)
+POST http://localhost:8080/api/tickets
+Content-Type: application/json
+
+{
+  "title": "",
+  "description": "",
+  "category": "",
+  "priority": "",
+  "createdBy": ""
+}

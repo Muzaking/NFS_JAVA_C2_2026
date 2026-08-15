@@ -125,3 +125,24 @@ Authentication verifies who you are (e.g., logging in with a username and passwo
 
 **What would happen if authentication was disabled on a production database?**
 Anyone who finds the server's IP address on the internet could freely connect to it, read all sensitive customer data, modify it, or completely delete all databases without needing a password.
+
+
+## Day 7 Exercise 3: Submission Notes
+
+### Database Confirmation
+I successfully confirmed that the API data was retrieved from MongoDB rather than the temporary in-memory list from Day 6. 
+
+**Evidence:**
+* **Data Match:** The `GET /api/tickets` endpoint returned the exact sample document I manually inserted into the `support_desk_db` database using MongoDB Compass during Exercise 1.
+* **ObjectId Generation:** The `id` field in the JSON response is a 24-character hexadecimal string (e.g., `"6a67ba32bf66d52f3ada82d3"`). This is an authentic `ObjectId` generated natively by MongoDB, completely replacing the simple string IDs used in the previous Java list implementation.
+
+
+## Day 7 Exercise 4: Submission Notes
+
+### Create Ticket Confirmation
+The `POST /api/tickets` endpoint successfully creates and saves new tickets directly to MongoDB. 
+
+**Evidence:**
+* Sending a valid JSON request returns a `201 Created` response containing the mapped Response DTO, which includes a newly generated MongoDB `ObjectId` (e.g., `"6a67ba..."`), an auto-generated timestamp for `createdAt`, and the default status of `"OPEN"`.
+* Sending an invalid JSON body triggers the `@Valid` annotations and successfully returns a `400 Bad Request` without attempting to save to the database.
+* **Database Verification:** I verified via MongoDB Compass that the new document is successfully persisted in the `support_desk_db` database inside the `tickets` collection.
