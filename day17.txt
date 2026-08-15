@@ -1,0 +1,12 @@
+====================== Docker Fundamentals ======================
+
+OS has a kernel 
+Libraries and dependencies (java version, node versions)
+
+Image               Packaged template of an app
+Container           An instance of an image 
+Dockerfile          Used to create an image 
+Build context       Files that Docker can see 
+.dockerignore       What files to not copy/send
+Port mapping        
+Env variables
