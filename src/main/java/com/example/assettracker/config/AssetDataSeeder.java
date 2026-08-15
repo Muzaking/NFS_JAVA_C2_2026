@@ -1,15 +1,14 @@
 package com.example.assettracker.config;
 
+import org.springframework.boot.CommandLineRunner;
+
 import com.example.assettracker.model.Asset;
 import com.example.assettracker.repository.AssetRepository;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
+// @Configuration  <--- Commented out!
 public class AssetDataSeeder {
 
-    @Bean
+    // @Bean       <--- Commented out!
     CommandLineRunner seedAssets(AssetRepository assetRepository) {
         return args -> {
             if (assetRepository.count() > 0) {
