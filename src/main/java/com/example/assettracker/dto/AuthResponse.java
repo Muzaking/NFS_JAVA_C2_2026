@@ -20,25 +20,11 @@ public class AuthResponse {
         this.role = role;
     }
 
-    public String getToken() {
-        return token;
-    }
-    public String getTokenType() {
-        return tokenType;
-    }
-    public long getExpiresInMinutes() {
-        return expiresInMinutes;
-    }
-    public String getUserId() {
-        return userId;
-    }
-    public String getName() {
-        return name;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public String getRole() {
-        return role;
-    }
+    public String getToken() { return token; }
+    public String getTokenType() { return tokenType; }
+    public long getExpiresInMinutes() { return expiresInMinutes; }
+    public String getUserId() { return userId; }
+    public String getName() { return name; }
+    public String getEmail() { return email; }
+    public String getRole() { return role; }
 }
