@@ -1,19 +1,20 @@
 package com.example.assettracker.config;
 
-import com.example.assettracker.model.Asset;
-import com.example.assettracker.repository.AssetRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
+import com.example.assettracker.model.Asset;
+import com.example.assettracker.repository.AssetRepository;
+
+// @Configuration  <--- Commented out!
 public class AssetDataSeeder {
 
     private static final Logger logger = LoggerFactory.getLogger(AssetDataSeeder.class);
 
     @Bean
+    // @Bean       <--- Commented out!
     CommandLineRunner seedAssets(AssetRepository assetRepository) {
         return args -> {
             createAssetIfMissing(assetRepository, "LAP-2026-4721", "Dell Latitude 5440", "Laptop", "SN-LAP-A1B2C3D4", "AVAILABLE", "HQ Level 3", null);
@@ -63,3 +64,4 @@ public class AssetDataSeeder {
         ));
     }
 }
+
