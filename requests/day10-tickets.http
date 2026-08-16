@@ -44,3 +44,11 @@ Authorization: Bearer {{token}}
 ### Report: tickets grouped by priority
 GET {{baseUrl}}/api/v1/reports/tickets-by-priority
 Authorization: Bearer {{token}}
+
+
+### ----------------------------------------------------
+### DAY 10 EXERCISE 4: API DOCUMENTATION
+### ----------------------------------------------------
+
+### Get API Documentation (Public)
+GET {{baseUrl}}/api/docs

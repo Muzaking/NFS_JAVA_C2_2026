@@ -242,3 +242,9 @@ Downloading all tickets to the frontend requires transferring a massive amount o
 
 **How could this report help a support manager decide where to assign staff?**
 A priority report provides immediate visibility into the urgency of the current workload. If the report shows a massive spike in "HIGH" priority tickets, the manager can proactively reassign staff from lower-priority tasks or administrative work to tackle the critical issues immediately, ensuring service level agreements (SLAs) are met and critical system blocks are resolved first.
+
+
+## Day 10 Exercise 4 - Reflection
+
+**Why is API documentation useful before frontend integration?**
+API documentation acts as a clear "contract" between the backend and frontend teams. It allows frontend developers to see exactly what endpoints exist, what HTTP methods to use, what security tokens are required, and what JSON structures to expect. This means the frontend team can start building their UI and integrating the API immediately without having to wait for backend developers to explain things or dig through backend Java code to figure it out.
