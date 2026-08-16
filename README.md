@@ -110,3 +110,46 @@ Participants may use AI tools to:
 
 Participants must always review, verify, test, and understand any AI-generated output. No passwords, API keys, tokens, private keys, or confidential data should be placed into AI prompts.
 
+# D11 Exercise 06 — Component Tree and Reflection
+
+## Support Desk Component Tree
+
+```text
+App
+├── Layout
+│   └── AppHeader
+├── ApiInfoCard
+├── TicketFilterPanel
+└── div (Ticket Workspace)
+    ├── TicketList
+    │   ├── PriorityBadge
+    │   └── StatusBadge
+    └── TicketDetail
+        ├── PriorityBadge
+        └── StatusBadge
+
+Reflection Answers
+1. Which component owns the selected ticket state?
+The App component owns the selectedTicket state (along with the filter and search states) so that it can pass the selected data down to the TicketDetail component.
+
+2. Which components receive props?
+
+TicketFilterPanel receives props for search text, status, and priority values (and their update functions).
+
+TicketList receives the filtered tickets array and the onSelectTicket function.
+
+TicketDetail receives the ticket object.
+
+Layout receives children props to wrap the main content.
+
+3. What does useEffect do in your app?
+In the ApiInfoCard component, useEffect triggers the fetchApiInfo() network request exactly once when the component first mounts to the screen, preventing it from fetching repeatedly on every render.
+
+4. What loading state did you create?
+An isLoading boolean state in ApiInfoCard. When set to true, the component renders a gray box displaying "⏳ Loading API Information..." while waiting for the Java backend to respond.
+
+5. What error state did you create?
+An error state in ApiInfoCard. If the fetch request fails (e.g., if the backend server is turned off), the catch block saves the error message to this state, and the component renders a red box displaying "❌ Error: [error message]".
+
+6. What would change when you connect this UI to the protected backend API later?
+We will need to capture a JWT token upon user login and attach it to the Authorization: Bearer <token> header for all future fetch requests. We will also need to handle HTTP 401/403 errors by logging the user out or redirecting them back to a login page if their token is missing or expires.
