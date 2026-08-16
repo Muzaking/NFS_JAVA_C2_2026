@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -29,6 +30,18 @@ public class TicketController {
             
         List<TicketResponseDTO> tickets = ticketService.getFilteredTickets(status, priority, category);
         return ResponseEntity.ok(tickets);
+    }
+
+    // --- DAY 8 EXERCISE 2: PAGINATED GET ENDPOINT ---
+    @GetMapping("/paged")
+    public ResponseEntity<Page<TicketResponseDTO>> getPagedTickets(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction) {
+            
+        Page<TicketResponseDTO> pagedTickets = ticketService.getPagedTickets(page, size, sortBy, direction);
+        return ResponseEntity.ok(pagedTickets);
     }
 
     // --- DAY 7 EXERCISE 4: POST ENDPOINT ---

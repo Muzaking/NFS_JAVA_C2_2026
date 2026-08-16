@@ -121,3 +121,12 @@ GET http://localhost:8080/api/tickets?priority=HIGH
 
 ### Day 8: Filter tickets by Category
 GET http://localhost:8080/api/tickets?category=Email
+
+### Day 8 Ex 2: Get paginated tickets (Page 0, Default sorting)
+GET http://localhost:8080/api/tickets/paged?page=0&size=5
+
+### Day 8 Ex 2: Get paginated tickets (Page 1)
+GET http://localhost:8080/api/tickets/paged?page=1&size=5
+
+### Day 8 Ex 2: Get paginated tickets (Custom sort: Priority Ascending, size 2)
+GET http://localhost:8080/api/tickets/paged?page=0&size=2&sortBy=priority&direction=asc

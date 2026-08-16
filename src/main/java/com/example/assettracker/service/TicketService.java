@@ -5,6 +5,10 @@ import com.example.assettracker.dto.TicketResponseDTO;
 import com.example.assettracker.model.Ticket;
 import com.example.assettracker.repository.TicketRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,6 +40,24 @@ public class TicketService {
         }
 
         return tickets.stream().map(this::mapToResponseDto).collect(Collectors.toList());
+    }
+
+    // --- DAY 8 EXERCISE 2: GET PAGINATED TICKETS ---
+    public Page<TicketResponseDTO> getPagedTickets(int page, int size, String sortBy, String direction) {
+        
+        // 1. Determine sort direction
+        Sort sort = direction.equalsIgnoreCase("asc") 
+            ? Sort.by(sortBy).ascending() 
+            : Sort.by(sortBy).descending();
+
+        // 2. Create the Pageable object
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        // 3. Fetch from repository using Pageable
+        Page<Ticket> ticketPage = ticketRepository.findAll(pageable);
+
+        // 4. Map the Page of Ticket entities to a Page of DTOs
+        return ticketPage.map(this::mapToResponseDto);
     }
 
     // --- DAY 7 EXERCISE 4: CREATE TICKET ---
