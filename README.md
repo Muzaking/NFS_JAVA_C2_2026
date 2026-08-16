@@ -232,3 +232,8 @@ The JWT is placed in the HTTP headers under the `Authorization` key, using the `
 
 **Why might a company keep both `/api/tickets` and `/api/v1/tickets` temporarily?**
 A company keeps both endpoints for backwards compatibility. If they instantly delete the old `/api/tickets` endpoint, they will break the existing frontend applications or mobile apps currently relying on it. By keeping both temporarily, developers give their clients time to migrate their code to use the new `/api/v1/tickets` route without causing sudden downtime.
+
+## Day 10 Exercise 2 - Reflection
+
+**Why is a grouped report endpoint better than asking the frontend to download all tickets and count them manually?**
+Downloading all tickets to the frontend requires transferring a massive amount of data over the network, which is extremely slow and wastes bandwidth. By using a grouped report endpoint, the backend utilizes MongoDB's highly optimized aggregation engine to do the heavy lifting. The frontend then only receives a tiny summary JSON payload, making the application significantly faster, more efficient, and infinitely more scalable.

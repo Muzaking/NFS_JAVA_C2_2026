@@ -32,3 +32,11 @@ Content-Type: application/json
   "priority": "MEDIUM",
   "createdBy": "admin@example.com"
 }
+
+### ----------------------------------------------------
+### DAY 10 EXERCISE 2: REPORTS
+### ----------------------------------------------------
+
+### Report: tickets grouped by status
+GET {{baseUrl}}/api/v1/reports/tickets-by-status
+Authorization: Bearer {{token}}
