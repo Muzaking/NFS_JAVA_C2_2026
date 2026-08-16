@@ -1,0 +1,34 @@
+### Base URL
+@baseUrl = http://localhost:8080
+
+### Login as admin to get token
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "Admin@12345"
+}
+
+### Copy the token from the login response and paste it below
+@token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBRE1JTiIsImlzcyI6ImFzc2V0LXRyYWNrZXItYXBpIiwibmFtZSI6IkFkbWluIFVzZXIiLCJleHAiOjE3ODY5MDQ1MjYsImlhdCI6MTc4NjkwMDkyNiwidXNlcklkIjoiNmE4MWQxM2MzNzBkMmJiNzljOGM5YjEwIn0.1lOTKY5vRiWEUElitdYHVvn23XOHcVetzRhOEGKHhls
+
+### 1. GET /api/v1/tickets without token (Expected: 401 Unauthorized)
+GET {{baseUrl}}/api/v1/tickets
+
+### 2. GET /api/v1/tickets with token (Expected: 200 OK)
+GET {{baseUrl}}/api/v1/tickets
+Authorization: Bearer {{token}}
+
+### 3. POST /api/v1/tickets with token (Expected: 201 Created)
+POST {{baseUrl}}/api/v1/tickets
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Testing V1 Endpoint",
+  "description": "Creating a ticket via the new versioned route.",
+  "category": "Software",
+  "priority": "MEDIUM",
+  "createdBy": "admin@example.com"
+}

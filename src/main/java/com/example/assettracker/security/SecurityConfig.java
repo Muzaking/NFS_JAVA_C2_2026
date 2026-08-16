@@ -1,5 +1,12 @@
 package com.example.assettracker.security;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Collection;
+import java.util.List;
+
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,12 +32,6 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.List;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -51,11 +52,21 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/docs/**").permitAll()
                         .requestMatchers("/api/v1/info").permitAll()
+                        
+                        // Asset Endpoints
                         .requestMatchers(HttpMethod.GET, "/api/assets", "/api/assets/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/assets").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/assets", "/api/v1/assets/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/assets").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/reports/**").hasAnyRole("USER", "ADMIN")
+                        
+                        // Day 10 Exercise 1: Version 1 Ticket Endpoints (Allows USER and ADMIN for all methods)
+                        .requestMatchers("/api/v1/tickets/**", "/api/v1/tickets").hasAnyRole("USER", "ADMIN")
+                        
+                        // Day 9: Older Ticket Endpoints
+                        .requestMatchers(HttpMethod.GET, "/api/tickets/**", "/api/tickets").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/tickets").hasRole("ADMIN")
+                        
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2

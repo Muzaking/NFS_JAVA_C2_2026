@@ -1,18 +1,14 @@
-### Day 9 - JWT Authentication Tests
-### Run the app first: mvn spring-boot:run
 ### Base URL
 @baseUrl = http://localhost:8080
 
+### ----------------------------------------------------
+### PUBLIC ENDPOINTS (No token required)
+### ----------------------------------------------------
 
 ### 1. Health check - public endpoint
 GET {{baseUrl}}/api/health
 
-
-### 2. Try to access assets without token - should return 401 Unauthorized
-GET {{baseUrl}}/api/assets
-
-
-### 3. Register a normal user - should return token with role USER
+### 2. Register a normal user - should return token with role USER
 POST {{baseUrl}}/api/auth/register
 Content-Type: application/json
 
@@ -22,8 +18,7 @@ Content-Type: application/json
   "password": "User@12345"
 }
 
-
-### 4. Login normal user - copy token from response
+### 3. Login normal user - copy token from response
 POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
@@ -32,28 +27,7 @@ Content-Type: application/json
   "password": "User@12345"
 }
 
-
-### 5. Get assets with USER token - should return 200 OK
-### Replace PASTE_USER_TOKEN_HERE with token from login/register response
-GET {{baseUrl}}/api/assets
-Authorization: Bearer PASTE_USER_TOKEN_HERE
-
-
-### 6. Try to create asset with USER token - should return 403 Forbidden
-POST {{baseUrl}}/api/assets
-Authorization: Bearer PASTE_USER_TOKEN_HERE
-Content-Type: application/json
-
-{
-  "assetTag": "CAM-2026-2001",
-  "name": "Logitech Webcam",
-  "category": "Camera",
-  "serialNumber": "SN-CAM-2001",
-  "location": "HQ Level 2"
-}
-
-
-### 7. Login seeded admin user - copy token from response
+### 4. Login seeded admin user - copy token from response
 ### Seeded admin credentials: admin@example.com / Admin@12345
 POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
@@ -63,23 +37,7 @@ Content-Type: application/json
   "password": "Admin@12345"
 }
 
-
-### 8. Create asset with ADMIN token - should return 201 Created
-### Replace PASTE_ADMIN_TOKEN_HERE with token from admin login response
-POST {{baseUrl}}/api/assets
-Authorization: Bearer PASTE_ADMIN_TOKEN_HERE
-Content-Type: application/json
-
-{
-  "assetTag": "CAM-2026-3001",
-  "name": "Logitech Brio Webcam",
-  "category": "Camera",
-  "serialNumber": "SN-CAM-3001",
-  "location": "HQ Level 2"
-}
-
-
-### 9. Login with wrong password - should return 401 Unauthorized
+### 5. Login with wrong password - should return 401 Unauthorized
 POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
@@ -88,8 +46,7 @@ Content-Type: application/json
   "password": "wrong-password"
 }
 
-
-### 10. Register duplicate email - should return 409 Conflict
+### 6. Register duplicate email - should return 409 Conflict
 POST {{baseUrl}}/api/auth/register
 Content-Type: application/json
 
@@ -98,3 +55,72 @@ Content-Type: application/json
   "email": "user@example.com",
   "password": "User@12345"
 }
+
+
+### ----------------------------------------------------
+### DAY 9 EXERCISE 3: PROTECTED TICKET ENDPOINTS
+### ----------------------------------------------------
+
+### 1. GET tickets without token - Should return 401 Unauthorized
+GET {{baseUrl}}/api/tickets
+
+### 2. GET tickets with USER token - Should return 200 OK
+### Replace PASTE_USER_TOKEN_HERE with token from normal user login
+GET {{baseUrl}}/api/tickets
+Authorization:Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwicm9sZSI6IlVTRVIiLCJpc3MiOiJhc3NldC10cmFja2VyLWFwaSIsIm5hbWUiOiJOb3JtYWwgVXNlciIsImV4cCI6MTc4NjkwMDg5NCwiaWF0IjoxNzg2ODk3Mjk0LCJ1c2VySWQiOiI2YTgxZDE4OTM3MGQyYmI3OWM4YzliMTEifQ.qHBZYb_ZPKw2Ech_PWEjRCX0lLdymPXxDBoEDIM_OVk
+
+### 3. Try to create ticket with USER token - Should return 403 Forbidden
+POST {{baseUrl}}/api/tickets
+Authorization:Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwicm9sZSI6IlVTRVIiLCJpc3MiOiJhc3NldC10cmFja2VyLWFwaSIsIm5hbWUiOiJOb3JtYWwgVXNlciIsImV4cCI6MTc4NjkwMDg5NCwiaWF0IjoxNzg2ODk3Mjk0LCJ1c2VySWQiOiI2YTgxZDE4OTM3MGQyYmI3OWM4YzliMTEifQ.qHBZYb_ZPKw2Ech_PWEjRCX0lLdymPXxDBoEDIM_OVk
+
+{
+  "title": "User trying to create a ticket",
+  "description": "This should fail.",
+  "category": "Hardware",
+  "priority": "LOW",
+  "createdBy": "user@example.com"
+}
+
+### 4. Create ticket with ADMIN token - Should return 201 Created
+### Replace PASTE_ADMIN_TOKEN_HERE with token from admin login
+POST {{baseUrl}}/api/tickets
+Authorization:Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBRE1JTiIsImlzcyI6ImFzc2V0LXRyYWNrZXItYXBpIiwibmFtZSI6IkFkbWluIFVzZXIiLCJleHAiOjE3ODY5MDA5NzcsImlhdCI6MTc4Njg5NzM3NywidXNlcklkIjoiNmE4MWQxM2MzNzBkMmJiNzljOGM5YjEwIn0.gGgCSqirXifOlyBDQwp0DicsbhAmBYPAb1VZsE4sS1w
+Content-Type: application/json
+
+{
+  "title": "Admin creating a ticket",
+  "description": "This should succeed.",
+  "category": "Hardware",
+  "priority": "HIGH",
+  "createdBy": "admin@example.com"
+}
+
+
+### ----------------------------------------------------
+### OLDER TICKET API TESTS (DAY 7 & 8)
+### Note: These now require a valid token to work!
+### ----------------------------------------------------
+
+### Get one ticket by ID
+GET {{baseUrl}}/api/tickets/YOUR_REAL_TICKET_ID
+Authorization: Bearer PASTE_USER_TOKEN_HERE
+
+### Filter tickets by Status
+GET {{baseUrl}}/api/tickets?status=OPEN
+Authorization: Bearer PASTE_USER_TOKEN_HERE
+
+### Filter tickets by Priority
+GET {{baseUrl}}/api/tickets?priority=HIGH
+Authorization: Bearer PASTE_USER_TOKEN_HERE
+
+### Filter tickets by Category
+GET {{baseUrl}}/api/tickets?category=Email
+Authorization: Bearer PASTE_USER_TOKEN_HERE
+
+### Get paginated tickets (Page 0, Default sorting)
+GET {{baseUrl}}/api/tickets/paged?page=0&size=5
+Authorization: Bearer PASTE_USER_TOKEN_HERE
+
+### Get paginated tickets (Custom sort: CreatedAt Descending)
+GET {{baseUrl}}/api/tickets/paged?page=0&size=5&sortBy=createdAt&direction=desc
+Authorization: Bearer PASTE_USER_TOKEN_HERE
