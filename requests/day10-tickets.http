@@ -11,8 +11,7 @@ Content-Type: application/json
 }
 
 ### Copy the token from the login response and paste it below
-@token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBRE1JTiIsImlzcyI6ImFzc2V0LXRyYWNrZXItYXBpIiwibmFtZSI6IkFkbWluIFVzZXIiLCJleHAiOjE3ODY5MDQ1MjYsImlhdCI6MTc4NjkwMDkyNiwidXNlcklkIjoiNmE4MWQxM2MzNzBkMmJiNzljOGM5YjEwIn0.1lOTKY5vRiWEUElitdYHVvn23XOHcVetzRhOEGKHhls
-
+@token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBRE1JTiIsImlzcyI6ImFzc2V0LXRyYWNrZXItYXBpIiwibmFtZSI6IkFkbWluIFVzZXIiLCJleHAiOjE3ODY5MDY0ODgsImlhdCI6MTc4NjkwMjg4OCwidXNlcklkIjoiNmE4MWQxM2MzNzBkMmJiNzljOGM5YjEwIn0.R95or7FzDhBPctdqo9jL28Y-Mhyu__cJ53wMcOY1K2c
 ### 1. GET /api/v1/tickets without token (Expected: 401 Unauthorized)
 GET {{baseUrl}}/api/v1/tickets
 

@@ -248,3 +248,9 @@ A priority report provides immediate visibility into the urgency of the current 
 
 **Why is API documentation useful before frontend integration?**
 API documentation acts as a clear "contract" between the backend and frontend teams. It allows frontend developers to see exactly what endpoints exist, what HTTP methods to use, what security tokens are required, and what JSON structures to expect. This means the frontend team can start building their UI and integrating the API immediately without having to wait for backend developers to explain things or dig through backend Java code to figure it out.
+
+
+## Day 10 Exercise 5 - Reflection
+
+**What is one thing you would improve before connecting this backend to React?**
+One crucial improvement would be configuring CORS (Cross-Origin Resource Sharing) globally in the Spring Security setup. Currently, the backend runs on port 8080. When a React frontend starts up (usually on port 3000 or 5173), the web browser will block any API requests due to the differing origins. Explicitly allowing the frontend's specific origin URL in the backend's CORS policy is required to allow seamless communication between the two applications.
