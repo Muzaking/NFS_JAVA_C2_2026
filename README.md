@@ -186,3 +186,22 @@ This violates the "Separation of Concerns" design principle. The Controller's on
 * Enabled auto-index creation in `application.properties`.
 * Integrated SLF4J `Logger` into `TicketService`.
 * **Verification:** Terminal logs successfully confirm incoming filter variables during `GET` requests, pagination variables, and the final generated MongoDB `ObjectId` when a new ticket is saved via `POST`.
+
+
+## Day 8 Exercise 4: Query Test File and Notes
+
+**1. Which query parameters did you implement?**
+I implemented `status`, `priority`, and `category` for the filtering endpoint. For the pagination and sorting endpoint, I implemented `page`, `size`, `sortBy`, and `direction`.
+
+**2. Which fields did you index?**
+In the `Ticket` model, I applied the `@Indexed` annotation to the `status`, `priority`, `category`, `createdBy`, and `createdAt` fields to optimize database read performance.
+
+**3. Why should an API use pagination?**
+An API should use pagination to prevent the server from crashing or slowing down when trying to return massive datasets. Returning thousands or millions of records at once consumes too much memory, bandwidth, and processing power. Pagination breaks the data into manageable chunks, significantly improving performance and user experience.
+
+**4. What log messages appear when you call the filtering endpoint?**
+When calling the filtering endpoint (e.g., `GET /api/tickets?status=OPEN`), the SLF4J logger prints:
+`INFO ... c.e.assettracker.service.TicketService : Fetching tickets with filters - status: OPEN, priority: null, category: null`
+
+**5. What endpoint proves your sorting works?**
+The endpoint `GET /api/tickets/paged?page=0&size=5&sortBy=createdAt&direction=desc` proves the sorting works, as modifying the `sortBy` or `direction` parameters changes the order of the array returned in the `content` field of the JSON response.

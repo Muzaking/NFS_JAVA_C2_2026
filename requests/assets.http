@@ -110,23 +110,23 @@ Content-Type: application/json
   "createdBy": ""
 }
 
-### Day 8: Get all tickets (No filters)
+### Get all tickets (No filters)
 GET http://localhost:8080/api/tickets
 
-### Day 8: Filter tickets by Status
+### Filter tickets by Status
 GET http://localhost:8080/api/tickets?status=OPEN
 
-### Day 8: Filter tickets by Priority
+### Filter tickets by Priority
 GET http://localhost:8080/api/tickets?priority=HIGH
 
-### Day 8: Filter tickets by Category
+### Filter tickets by Category
 GET http://localhost:8080/api/tickets?category=Email
 
-### Day 8 Ex 2: Get paginated tickets (Page 0, Default sorting)
+### Get paginated tickets (Page 0, Default sorting)
 GET http://localhost:8080/api/tickets/paged?page=0&size=5
 
-### Day 8 Ex 2: Get paginated tickets (Page 1)
+### Get paginated tickets (Page 1)
 GET http://localhost:8080/api/tickets/paged?page=1&size=5
 
-### Day 8 Ex 2: Get paginated tickets (Custom sort: Priority Ascending, size 2)
-GET http://localhost:8080/api/tickets/paged?page=0&size=2&sortBy=priority&direction=asc
+### Get paginated tickets (Custom sort: CreatedAt Descending)
+GET http://localhost:8080/api/tickets/paged?page=0&size=5&sortBy=createdAt&direction=desc
