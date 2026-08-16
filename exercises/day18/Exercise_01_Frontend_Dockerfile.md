@@ -7,3 +7,11 @@ It must:
 - build React using Node
 - serve production files using Nginx
 - not use `npm run dev` in the final container
+
+BEFORE ATTEMPTING YOUR EXERCISE, CONFIRM:
+
+java --version
+node --version
+npm --version
+docker --version
+docker compose version
