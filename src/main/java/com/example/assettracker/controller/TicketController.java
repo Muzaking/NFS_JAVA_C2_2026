@@ -28,7 +28,8 @@ public class TicketController {
             @RequestParam(required = false) String priority,
             @RequestParam(required = false) String category) {
             
-        List<TicketResponseDTO> tickets = ticketService.getFilteredTickets(status, priority, category);
+        // FIXED: Changed getFilteredTickets to getAllTickets
+        List<TicketResponseDTO> tickets = ticketService.getAllTickets(status, priority, category);
         return ResponseEntity.ok(tickets);
     }
 

@@ -177,3 +177,12 @@ MongoDB automatically generates and stores a 24-character hexadecimal string cal
 
 **4. Why should the controller not talk directly to MongoDB?**
 This violates the "Separation of Concerns" design principle. The Controller's only job should be receiving HTTP requests and sending HTTP responses. If it talks directly to the database, business logic gets tangled with routing logic, making the application extremely difficult to test, maintain, and scale. By routing data through a Service layer to the Repository, we keep the architecture clean and modular.
+
+
+## Day 8 Exercise 3: Submission Notes
+
+### Indexing and Logging
+* Added `@Indexed` annotations to `status`, `priority`, `category`, `createdBy`, and `createdAt` in the `Ticket` model to optimize database read operations.
+* Enabled auto-index creation in `application.properties`.
+* Integrated SLF4J `Logger` into `TicketService`.
+* **Verification:** Terminal logs successfully confirm incoming filter variables during `GET` requests, pagination variables, and the final generated MongoDB `ObjectId` when a new ticket is saved via `POST`.
