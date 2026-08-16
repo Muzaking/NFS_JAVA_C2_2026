@@ -42,4 +42,10 @@ public class ReportController {
     public List<ReportCountResponse> getTicketsByStatus() {
         return ticketReportService.getTicketCountByStatus();
     }
+
+    // NEW EXERCISE 3 ENDPOINT
+    @GetMapping("/tickets-by-priority")
+    public List<ReportCountResponse> getTicketsByPriority() {
+        return ticketReportService.countTicketsByPriority();
+    }
 }

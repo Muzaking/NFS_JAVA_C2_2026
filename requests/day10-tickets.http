@@ -40,3 +40,7 @@ Content-Type: application/json
 ### Report: tickets grouped by status
 GET {{baseUrl}}/api/v1/reports/tickets-by-status
 Authorization: Bearer {{token}}
+
+### Report: tickets grouped by priority
+GET {{baseUrl}}/api/v1/reports/tickets-by-priority
+Authorization: Bearer {{token}}

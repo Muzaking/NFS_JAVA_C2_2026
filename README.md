@@ -237,3 +237,8 @@ A company keeps both endpoints for backwards compatibility. If they instantly de
 
 **Why is a grouped report endpoint better than asking the frontend to download all tickets and count them manually?**
 Downloading all tickets to the frontend requires transferring a massive amount of data over the network, which is extremely slow and wastes bandwidth. By using a grouped report endpoint, the backend utilizes MongoDB's highly optimized aggregation engine to do the heavy lifting. The frontend then only receives a tiny summary JSON payload, making the application significantly faster, more efficient, and infinitely more scalable.
+
+## Day 10 Exercise 3 - Reflection
+
+**How could this report help a support manager decide where to assign staff?**
+A priority report provides immediate visibility into the urgency of the current workload. If the report shows a massive spike in "HIGH" priority tickets, the manager can proactively reassign staff from lower-priority tasks or administrative work to tackle the critical issues immediately, ensuring service level agreements (SLAs) are met and critical system blocks are resolved first.
