@@ -205,3 +205,24 @@ When calling the filtering endpoint (e.g., `GET /api/tickets?status=OPEN`), the 
 
 **5. What endpoint proves your sorting works?**
 The endpoint `GET /api/tickets/paged?page=0&size=5&sortBy=createdAt&direction=desc` proves the sorting works, as modifying the `sortBy` or `direction` parameters changes the order of the array returned in the `content` field of the JSON response.
+
+
+## Day 9 Exercise 5 - Authentication Reflection Notes
+
+**1. What is authentication?**
+Authentication is the process of verifying *who* a user is. It confirms the user's identity, typically by checking credentials like an email and password against a database.
+
+**2. What is authorisation?**
+Authorisation is the process of verifying *what* a user is allowed to do. Once a user is authenticated, authorisation determines their permissions, such as whether they have the "ADMIN" role required to create a ticket.
+
+**3. What does 401 mean?**
+`401 Unauthorized` means the client must authenticate itself to get the requested response. It happens when a token is missing, expired, or entirely invalid.
+
+**4. What does 403 mean?**
+`403 Forbidden` means the client's identity is known (they are authenticated), but they do not have the correct access rights to the content. It happens when a "USER" tries to access an endpoint that strictly requires an "ADMIN" role.
+
+**5. Why do we hash passwords?**
+We hash passwords to protect user credentials in the event of a database breach. Hashing uses a one-way mathematical algorithm (like BCrypt) that cannot be reversed. This ensures plain text passwords are never stored or exposed.
+
+**6. Where is the JWT placed in an HTTP request?**
+The JWT is placed in the HTTP headers under the `Authorization` key, using the `Bearer` schema. Format: `Authorization: Bearer <token_string>`.

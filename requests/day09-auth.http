@@ -1,0 +1,91 @@
+### Base URL
+@baseUrl = http://localhost:8080
+
+### ----------------------------------------------------
+### PUBLIC ENDPOINTS 
+### ----------------------------------------------------
+
+### 1. Health endpoint is public
+GET {{baseUrl}}/api/health
+
+
+### ----------------------------------------------------
+### AUTHENTICATION (USER)
+### ----------------------------------------------------
+
+### 2. Ticket endpoint without token returns 401
+GET {{baseUrl}}/api/tickets
+
+
+### 3. Register user returns token
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Normal User",
+  "email": "user99@example.com",
+  "password": "User@12345"
+}
+
+
+### 4. Login user returns token
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "user99@example.com",
+  "password": "User@12345"
+}
+
+
+### ----------------------------------------------------
+### AUTHORISATION (USER)
+### Replace PASTE_USER_TOKEN_HERE with token from request #4
+### ----------------------------------------------------
+
+### 5. Ticket endpoint with token returns 200
+GET {{baseUrl}}/api/tickets
+Authorization: Bearer PASTE_USER_TOKEN_HERE
+
+
+### 6. Create ticket with normal USER token returns 403
+POST {{baseUrl}}/api/tickets
+Authorization: Bearer PASTE_USER_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "title": "User ticket test",
+  "description": "This should fail due to lack of admin rights.",
+  "category": "Hardware",
+  "priority": "LOW",
+  "createdBy": "user99@example.com"
+}
+
+
+### ----------------------------------------------------
+### AUTHORISATION (ADMIN)
+### ----------------------------------------------------
+
+### 7. Login admin returns token (Using the seeded admin)
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "Admin@12345"
+}
+
+
+### 8. Create ticket with ADMIN token returns 201
+### Replace PASTE_ADMIN_TOKEN_HERE with token from request #7
+POST {{baseUrl}}/api/tickets
+Authorization: Bearer PASTE_ADMIN_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "title": "Admin ticket test",
+  "description": "This should succeed.",
+  "category": "Hardware",
+  "priority": "HIGH",
+  "createdBy": "admin@example.com"
+}
