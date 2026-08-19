@@ -1,26 +1,28 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom'; // <-- Import useLocation
 import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
-  // Pre-fill with the seeded backend credentials
   const [email, setEmail] = useState('admin@example.com');
   const [password, setPassword] = useState('Admin@12345');
   const [error, setError] = useState('');
   
   const navigate = useNavigate();
-  const { login } = useAuth(); // Grab the login function from context
+  const location = useLocation(); // <-- Get the location object
+  const { login } = useAuth();
+
+  // 1. Check if they came from a protected route. If not, default to dashboard.
+  const from = location.state?.from?.pathname || '/app/dashboard';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     
-    // Call the login function from AuthContext
     const success = await login(email, password);
     
     if (success) {
-      // If backend returns a token, redirect to dashboard
-      navigate('/app/dashboard');
+      // 2. Redirect to their original destination instead of hardcoding '/app/dashboard'
+      navigate(from, { replace: true });
     } else {
       setError('Invalid email or password. Is the Java backend running?');
     }

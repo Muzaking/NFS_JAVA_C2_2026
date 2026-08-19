@@ -1,15 +1,15 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export default function ProtectedRoute({ children }) {
-  const { token } = useAuth(); 
+  const { token } = useAuth();
   
-  // Let's see exactly what the guard thinks your token is!
-  console.log("Security Guard Check! Token is:", token);
+  // 1. Grab the current location the user is trying to access
+  const location = useLocation();
 
   if (!token) {
-    console.log("No token found! Bouncing to login...");
-    return <Navigate to="/login" replace />;
+    // 2. Pass that location inside the 'state' prop when redirecting
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   return children;
