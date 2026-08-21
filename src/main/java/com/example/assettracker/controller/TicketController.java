@@ -1,31 +1,39 @@
 package com.example.assettracker.controller;
 
-// --- ALL YOUR IMPORTS MUST BE AT THE TOP ---
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.assettracker.dto.TicketResponse;
+import com.example.assettracker.dto.CreateTicketRequest;
+import com.example.assettracker.dto.TicketResponse; // Make sure this matches your DTO name!
 import com.example.assettracker.dto.UpdateTicketRequest;
 import com.example.assettracker.service.TicketService; 
 
 import jakarta.validation.Valid;
 
-// --- YOUR CLASS WRAPPER MUST BE HERE ---
 @RestController
-@RequestMapping("/api/v1/tickets") // (Change this if your base URL is different)
+@RequestMapping("/api/v1/tickets")
 public class TicketController {
 
     @Autowired
     private TicketService ticketService;
 
-    // ... (Keep any of your older GET/POST endpoints here) ...
+    // --- NEW: POST ENDPOINT TO CREATE TICKETS ---
+    @PostMapping
+    public ResponseEntity<TicketResponse> createTicket(
+            @Valid @RequestBody CreateTicketRequest request) {
+        
+        TicketResponse newTicket = ticketService.createTicket(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newTicket);
+    }
 
-    // --- YOUR NEW PUT ENDPOINT GOES INSIDE THE CLASS ---
+    // --- EXISTING: PUT ENDPOINT TO UPDATE TICKETS ---
     @PutMapping("/{id}")
     public ResponseEntity<TicketResponse> updateTicket(
             @PathVariable String id,
@@ -34,4 +42,4 @@ public class TicketController {
         TicketResponse updatedTicket = ticketService.updateTicket(id, request);
         return ResponseEntity.ok(updatedTicket);
     }
-} // <-- DO NOT FORGET THIS FINAL CLOSING BRACE
+}

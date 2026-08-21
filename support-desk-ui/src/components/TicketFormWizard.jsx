@@ -1,107 +1,106 @@
 import { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { createTicket } from '../services/ticketService'; 
 
 const TicketFormWizard = () => {
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    category: '', // Blank by default to force user selection
-    priority: '',
-    status: ''
-  });
+  // 1. Grab the token from context
+  const { token } = useAuth();
 
-  // 1. New state to track validation errors
+  const [formData, setFormData] = useState({
+    title: '', description: '', category: '', priority: '', status: ''
+  });
   const [errors, setErrors] = useState({});
+  
+  // 2. New Backend states
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState('');
+  const [submitError, setSubmitError] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
-    
-    // Clear the error dynamically as the user starts typing/selecting
-    if (errors[name]) {
-      setErrors(prevErrors => ({
-        ...prevErrors,
-        [name]: ''
-      }));
-    }
+    setFormData(prevState => ({ ...prevState, [name]: value }));
+    if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
   };
 
-  // 2. The Validation Logic
   const validateForm = () => {
     const newErrors = {};
-    
     if (!formData.title.trim()) newErrors.title = 'Title is required';
     if (!formData.description.trim()) newErrors.description = 'Description is required';
     if (!formData.category) newErrors.category = 'Category is required';
     if (!formData.priority) newErrors.priority = 'Priority is required';
     if (!formData.status) newErrors.status = 'Status is required';
-
     setErrors(newErrors);
-    
-    // Returns true only if the errors object is completely empty
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // 3. Block submission if validation fails
-    if (!validateForm()) {
-      console.log("Form submission blocked: Missing required fields.");
-      return;
-    }
+    setSubmitSuccess('');
+    setSubmitError('');
 
-    console.log("Form Submitted successfully with data:", formData);
+    if (!validateForm()) return;
+
+    // --- DEBUG TRAP ACTIVATED ---
+    console.log("Sending Token to Backend:", token);
+
+    // 3. Start Loading State
+    setIsSubmitting(true);
+    
+    try {
+      // 4. Send the data to Spring Boot!
+      await createTicket(token, formData);
+      setSubmitSuccess('Ticket created successfully! It is now saved in the database.');
+      
+      // Clear the form for the next ticket
+      setFormData({ title: '', description: '', category: '', priority: '', status: '' });
+    } catch (error) {
+      // Catch backend errors (like a 500 or network failure)
+      setSubmitError(error.message);
+    } finally {
+      // End Loading State
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md mt-10">
       <h2 className="text-2xl font-bold mb-6">Create New Support Ticket</h2>
       
-      {/* noValidate stops the default HTML5 browser popups */}
+      {/* --- BACKEND MESSAGE BANNERS --- */}
+      {submitSuccess && (
+        <div className="mb-4 p-3 bg-green-100 text-green-700 border border-green-400 rounded">
+          {submitSuccess}
+        </div>
+      )}
+      {submitError && (
+        <div className="mb-4 p-3 bg-red-100 text-red-700 border border-red-400 rounded">
+          {submitError}
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-        
-        {/* Title Input */}
         <div>
           <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title</label>
           <input
-            type="text"
-            id="title"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
+            type="text" id="title" name="title" value={formData.title} onChange={handleChange} disabled={isSubmitting}
             className={`mt-1 block w-full border ${errors.title ? 'border-red-500' : 'border'} rounded-md p-2`}
-            placeholder="e.g., Laptop won't turn on"
           />
-          {/* Inline Error Message */}
           {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
         </div>
 
-        {/* Description Input */}
         <div>
           <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
           <textarea
-            id="description"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            rows="4"
+            id="description" name="description" value={formData.description} onChange={handleChange} rows="4" disabled={isSubmitting}
             className={`mt-1 block w-full border ${errors.description ? 'border-red-500' : 'border'} rounded-md p-2`}
-            placeholder="Provide detailed information..."
           />
           {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
         </div>
 
-        {/* Category Dropdown */}
         <div>
           <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category</label>
           <select
-            id="category"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
+            id="category" name="category" value={formData.category} onChange={handleChange} disabled={isSubmitting}
             className={`mt-1 block w-full border ${errors.category ? 'border-red-500' : 'border'} rounded-md p-2`}
           >
             <option value="">-- Select a Category --</option>
@@ -113,14 +112,10 @@ const TicketFormWizard = () => {
           {errors.category && <p className="text-red-500 text-sm mt-1">{errors.category}</p>}
         </div>
 
-        {/* Priority Dropdown */}
         <div>
           <label htmlFor="priority" className="block text-sm font-medium text-gray-700">Priority</label>
           <select
-            id="priority"
-            name="priority"
-            value={formData.priority}
-            onChange={handleChange}
+            id="priority" name="priority" value={formData.priority} onChange={handleChange} disabled={isSubmitting}
             className={`mt-1 block w-full border ${errors.priority ? 'border-red-500' : 'border'} rounded-md p-2`}
           >
             <option value="">-- Select Priority --</option>
@@ -131,14 +126,10 @@ const TicketFormWizard = () => {
           {errors.priority && <p className="text-red-500 text-sm mt-1">{errors.priority}</p>}
         </div>
 
-        {/* Status Dropdown */}
         <div>
           <label htmlFor="status" className="block text-sm font-medium text-gray-700">Status</label>
           <select
-            id="status"
-            name="status"
-            value={formData.status}
-            onChange={handleChange}
+            id="status" name="status" value={formData.status} onChange={handleChange} disabled={isSubmitting}
             className={`mt-1 block w-full border ${errors.status ? 'border-red-500' : 'border'} rounded-md p-2`}
           >
             <option value="">-- Select Status --</option>
@@ -149,12 +140,13 @@ const TicketFormWizard = () => {
           {errors.status && <p className="text-red-500 text-sm mt-1">{errors.status}</p>}
         </div>
 
-        {/* Submit Button */}
+        {/* Dynamic Loading Button */}
         <button 
           type="submit" 
-          className="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded mt-4"
+          disabled={isSubmitting}
+          className={`w-full text-white font-bold py-2 px-4 rounded mt-4 ${isSubmitting ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
         >
-          Create Ticket
+          {isSubmitting ? 'Saving Ticket...' : 'Create Ticket'}
         </button>
       </form>
     </div>
