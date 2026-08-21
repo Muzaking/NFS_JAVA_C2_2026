@@ -1,30 +1,36 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
-import Tickets from './pages/Tickets';
-import Reports from './pages/Reports';
-import AppShell from './components/AppShell';
-import ProtectedRoute from './components/ProtectedRoute'; // <-- Import your new guard
+import ProtectedRoute from './components/ProtectedRoute';
+import TicketFormPage from './pages/TicketFormPage';
 
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/login" />} />
-      <Route path="/login" element={<Login />} />
-      
-      {/* Protect the entire App area by wrapping AppShell */}
+      {/* 1. Add a dummy login page so the app has somewhere to send you if your token is missing! */}
+      <Route path="/login" element={<div className="p-10 text-xl font-bold text-center mt-10">Login Page (Coming Soon)</div>} />
+
+      {/* 2. Create New Ticket Route */}
       <Route 
-        path="/app" 
+        path="/app/tickets/new" 
         element={
           <ProtectedRoute>
-            <AppShell />
+            <TicketFormPage />
           </ProtectedRoute>
-        }
-      >
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="tickets" element={<Tickets />} />
-        <Route path="reports" element={<Reports />} />
-      </Route>
+        } 
+      />
+
+      {/* 3. NEW: Edit Existing Ticket Route */}
+      <Route 
+        path="/app/tickets/:ticketId/edit" 
+        element={
+          <ProtectedRoute>
+            <TicketFormPage />
+          </ProtectedRoute>
+        } 
+      />
+
+      {/* Fallback redirects */}
+      <Route path="/app" element={<Navigate to="/app/tickets/new" replace />} />
+      <Route path="*" element={<Navigate to="/app/tickets/new" replace />} />
     </Routes>
   );
 }
