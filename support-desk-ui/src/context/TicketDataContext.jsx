@@ -56,6 +56,18 @@ const ticketReducer = (state, action) => {
       
     case 'SELECT_TICKET':
       return { ...state, selectedTicketId: action.payload };
+
+    // --- NEW CASE: Handle Optimistic UI Updates ---
+    case 'UPDATE_TICKET': {
+      const updatedTickets = state.tickets.map(ticket => 
+        ticket.id === action.payload.id ? action.payload : ticket
+      );
+      
+      return { 
+        ...state, 
+        tickets: updatedTickets 
+      };
+    }
       
     default:
       console.warn(`Unhandled action type: ${action.type}`);
