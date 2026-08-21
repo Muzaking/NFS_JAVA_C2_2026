@@ -8,9 +8,19 @@ export default function App() {
       {/* 1. Add a dummy login page so the app has somewhere to send you if your token is missing! */}
       <Route path="/login" element={<div className="p-10 text-xl font-bold text-center mt-10">Login Page (Coming Soon)</div>} />
 
-      {/* 2. Use the wrapper pattern so the 'children' prop receives the form page perfectly */}
+      {/* 2. Create New Ticket Route */}
       <Route 
         path="/app/tickets/new" 
+        element={
+          <ProtectedRoute>
+            <TicketFormPage />
+          </ProtectedRoute>
+        } 
+      />
+
+      {/* 3. NEW: Edit Existing Ticket Route */}
+      <Route 
+        path="/app/tickets/:ticketId/edit" 
         element={
           <ProtectedRoute>
             <TicketFormPage />

@@ -36,3 +36,20 @@ export const updateTicket = async (id, token, payload) => {
 
   return response.json();
 };
+
+// --- NEW: GET TICKET BY ID FOR EDIT MODE ---
+export const getTicketById = async (id, token) => {
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch ticket details.');
+  }
+
+  return response.json();
+};

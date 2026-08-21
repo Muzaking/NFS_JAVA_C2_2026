@@ -1,6 +1,6 @@
 package com.example.assettracker.service;
 
-import org.springframework.beans.factory.annotation.Autowired; // <-- Added the new DTO import
+import org.springframework.beans.factory.annotation.Autowired; 
 import org.springframework.stereotype.Service;
 
 import com.example.assettracker.dto.CreateTicketRequest;
@@ -15,7 +15,25 @@ public class TicketService {
     @Autowired
     private TicketRepository ticketRepository;
 
-    // --- NEW: CREATE TICKET METHOD ---
+    // --- NEW: FETCH TICKET BY ID METHOD ---
+    public TicketResponse getTicketById(String id) {
+        // 1. Find the ticket in MongoDB
+        Ticket ticket = ticketRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ticket not found with id: " + id));
+
+        // 2. Convert to Response DTO
+        TicketResponse response = new TicketResponse();
+        response.setId(ticket.getId());
+        response.setTitle(ticket.getTitle());
+        response.setDescription(ticket.getDescription());
+        response.setCategory(ticket.getCategory());
+        response.setPriority(ticket.getPriority());
+        response.setStatus(ticket.getStatus());
+        
+        return response;
+    }
+
+    // --- EXISTING: CREATE TICKET METHOD ---
     public TicketResponse createTicket(CreateTicketRequest request) {
         // 1. Create a brand new Ticket entity
         Ticket ticket = new Ticket();
