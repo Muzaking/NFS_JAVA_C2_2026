@@ -110,3 +110,26 @@ Participants may use AI tools to:
 
 Participants must always review, verify, test, and understand any AI-generated output. No passwords, API keys, tokens, private keys, or confidential data should be placed into AI prompts.
 
+Day 12 Exercise 6: Protected Route Reflection
+
+
+What is the role of BrowserRouter?
+BrowserRouter is the core wrapper for the React application that connects it to the browser's URL. It uses the HTML5 History API to keep the UI in sync with the current URL without requiring a full page reload.
+
+What is the difference between Routes and Route?
+
+<Routes> acts as a container or a switchboard. It looks at the current URL and searches through all its children to find the best matching route.
+
+<Route> defines a single, specific URL path and tells the application exactly which component (element) to render when that path is visited.
+
+Why do we use Outlet?
+<Outlet> acts as a placeholder inside a parent layout component (like an AppShell). It tells React Router exactly where to render the nested child components (like Dashboard or Tickets) while keeping the parent's surrounding layout (like sidebars and navigation menus) static on the screen.
+
+What does Navigate do?
+<Navigate> is used to instantly redirect a user to a different URL. In our app, it acts as a bouncer—if a user tries to access a protected page without a token, <Navigate to="/login"/> instantly kicks them back to the login screen.
+
+Why is frontend route protection not enough by itself?
+Frontend code runs entirely inside the user's browser, which means a malicious user can inspect, manipulate, or bypass the JavaScript code to force the protected UI to render. True security requires the backend to refuse access to the actual data.
+
+Which backend endpoints still need to enforce security?
+Every single backend endpoint that deals with sensitive data or state changes must enforce security. This includes all API routes for fetching, creating, updating, or deleting Tickets, Reports, Users, and Assets. The backend must independently verify the JWT token on every single incoming request.
