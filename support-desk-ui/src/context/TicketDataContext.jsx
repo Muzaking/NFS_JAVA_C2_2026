@@ -7,7 +7,9 @@ const initialState = {
   loading: false,
   error: null,
   pageInfo: { page: 0, size: 10, totalElements: 0, totalPages: 0 },
-  filters: { searchText: '', status: '' }
+  filters: { searchText: '', status: '' },
+  cache: {},         // <--- NEW: Stores the cached pages
+  dataSource: ''     // <--- NEW: Tracks where the data came from
 };
 
 // 2. The Reducer: the only place where state is actually changed
@@ -21,7 +23,26 @@ const ticketReducer = (state, action) => {
         ...state, 
         loading: false, 
         tickets: action.payload.tickets,
-        pageInfo: action.payload.pageInfo || state.pageInfo
+        pageInfo: action.payload.pageInfo || state.pageInfo,
+        dataSource: 'Fetched from backend', // <--- NEW UI Message
+        cache: {
+          ...state.cache,
+          // Save the tickets AND total pages using the unique key
+          [action.payload.cacheKey]: {
+            tickets: action.payload.tickets,
+            totalPages: action.payload.totalPages
+          }
+        }
+      };
+
+    // --- NEW CASE: Handle loading from cache ---
+    case 'LOAD_FROM_CACHE':
+      return {
+        ...state,
+        loading: false,
+        tickets: action.payload.tickets,
+        dataSource: 'Loaded from cache',
+        error: null
       };
       
     case 'LOAD_ERROR':
