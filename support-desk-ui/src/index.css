@@ -103,3 +103,10 @@ input:focus, select:focus, textarea:focus {
 .rounded { border-radius: 0.25rem; }
 .hover\:bg-blue-700:hover { opacity: 0.9; }
 .mt-4 { margin-top: 1rem; }
+
+/* Add this to the very bottom of index.css */
+.text-red-500 { color: #ef4444; }
+.border-red-500 { 
+    border-color: #ef4444; 
+    outline-color: #ef4444; 
+}
