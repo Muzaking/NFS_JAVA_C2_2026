@@ -1,6 +1,8 @@
 package com.example.assettracker.service;
 
 import org.springframework.beans.factory.annotation.Autowired; 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.assettracker.dto.CreateTicketRequest;
@@ -15,13 +17,44 @@ public class TicketService {
     @Autowired
     private TicketRepository ticketRepository;
 
-    // --- NEW: FETCH TICKET BY ID METHOD ---
+    // --- UPDATED: FETCH PAGINATED TICKETS WITH FILTERS ---
+    public Page<TicketResponse> getPagedTickets(String search, String status, Pageable pageable) {
+        Page<Ticket> ticketPage;
+
+        // 1. Check which filters the user actually filled out
+        boolean hasSearch = search != null && !search.trim().isEmpty();
+        boolean hasStatus = status != null && !status.trim().isEmpty();
+
+        // 2. Route to the correct MongoDB query based on active filters
+        if (hasSearch && hasStatus) {
+            ticketPage = ticketRepository.findByTitleContainingIgnoreCaseAndStatus(search, status, pageable);
+        } else if (hasSearch) {
+            ticketPage = ticketRepository.findByTitleContainingIgnoreCase(search, pageable);
+        } else if (hasStatus) {
+            ticketPage = ticketRepository.findByStatus(status, pageable);
+        } else {
+            // Default: User didn't type anything, return all tickets
+            ticketPage = ticketRepository.findAll(pageable);
+        }
+        
+        // 3. Map the entity Page to a DTO Page
+        return ticketPage.map(ticket -> {
+            TicketResponse response = new TicketResponse();
+            response.setId(ticket.getId());
+            response.setTitle(ticket.getTitle());
+            response.setDescription(ticket.getDescription());
+            response.setCategory(ticket.getCategory());
+            response.setPriority(ticket.getPriority());
+            response.setStatus(ticket.getStatus());
+            return response;
+        });
+    }
+
+    // --- EXISTING: FETCH TICKET BY ID METHOD ---
     public TicketResponse getTicketById(String id) {
-        // 1. Find the ticket in MongoDB
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ticket not found with id: " + id));
 
-        // 2. Convert to Response DTO
         TicketResponse response = new TicketResponse();
         response.setId(ticket.getId());
         response.setTitle(ticket.getTitle());
@@ -35,7 +68,6 @@ public class TicketService {
 
     // --- EXISTING: CREATE TICKET METHOD ---
     public TicketResponse createTicket(CreateTicketRequest request) {
-        // 1. Create a brand new Ticket entity
         Ticket ticket = new Ticket();
         ticket.setTitle(request.getTitle());
         ticket.setDescription(request.getDescription());
@@ -43,10 +75,8 @@ public class TicketService {
         ticket.setPriority(request.getPriority());
         ticket.setStatus(request.getStatus());
 
-        // 2. Save it to MongoDB
         Ticket savedTicket = ticketRepository.save(ticket);
 
-        // 3. Convert back to a response DTO to send to React
         TicketResponse response = new TicketResponse();
         response.setId(savedTicket.getId());
         response.setTitle(savedTicket.getTitle());
@@ -60,21 +90,17 @@ public class TicketService {
 
     // --- EXISTING: UPDATE TICKET METHOD ---
     public TicketResponse updateTicket(String id, UpdateTicketRequest request) {
-        // 1. Find the existing ticket
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ticket not found with id: " + id));
 
-        // 2. Update the fields with the new data
         ticket.setTitle(request.getTitle());
         ticket.setDescription(request.getDescription());
         ticket.setCategory(request.getCategory());
         ticket.setPriority(request.getPriority());
         ticket.setStatus(request.getStatus());
 
-        // 3. Save to MongoDB
         Ticket updatedTicket = ticketRepository.save(ticket);
 
-        // 4. Convert back to response DTO manually
         TicketResponse response = new TicketResponse();
         response.setId(updatedTicket.getId());
         response.setTitle(updatedTicket.getTitle());

@@ -1,14 +1,19 @@
 package com.example.assettracker.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest; // <-- Added
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;        // <-- Added
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping; // <-- Added GetMapping import
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.assettracker.dto.CreateTicketRequest;
@@ -25,7 +30,34 @@ public class TicketController {
     @Autowired
     private TicketService ticketService;
 
-    // --- NEW: GET ENDPOINT TO FETCH A SINGLE TICKET ---
+    // --- NEW: GET ENDPOINT FOR PAGINATION (WITH SORT FIX) ---
+    // This MUST go above the /{id} mapping so "paged" isn't mistaken for an ID!
+    @GetMapping("/paged")
+    public ResponseEntity<Page<TicketResponse>> getPagedTickets(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "id") String sortBy, 
+            @RequestParam(defaultValue = "desc") String direction,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String status) {
+        
+        // 1. Safety Check: If React asks for 'createdAt', fallback to 'id' to prevent database crash
+        if ("createdAt".equals(sortBy)) {
+            sortBy = "id"; 
+        }
+
+        // 2. Safely parse the direction (ASC or DESC)
+        Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        
+        // 3. Manually build the Pageable object with the safe parameters
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+        
+        // 4. Fetch the data
+        Page<TicketResponse> tickets = ticketService.getPagedTickets(search, status, pageable);
+        return ResponseEntity.ok(tickets);
+    }
+
+    // --- EXISTING: GET ENDPOINT TO FETCH A SINGLE TICKET ---
     @GetMapping("/{id}")
     public ResponseEntity<TicketResponse> getTicketById(@PathVariable String id) {
         TicketResponse ticket = ticketService.getTicketById(id);
