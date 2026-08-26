@@ -1,15 +1,16 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
 import TicketFormPage from './pages/TicketFormPage';
-import TicketsPage from './pages/Tickets'; // <-- NEW: Import the Tickets page
+import TicketsPage from './pages/Tickets'; 
+import Login from './pages/Login'; // <-- ADDED: Import the actual Login component
 
 export default function App() {
   return (
     <Routes>
-      {/* 1. Dummy login page */}
-      <Route path="/login" element={<div className="p-10 text-xl font-bold text-center mt-10">Login Page (Coming Soon)</div>} />
+      {/* 1. Real login page */}
+      <Route path="/login" element={<Login />} />
 
-      {/* 2. NEW: Main Tickets List Route */}
+      {/* 2. Main Tickets List Route */}
       <Route 
         path="/app/tickets" 
         element={

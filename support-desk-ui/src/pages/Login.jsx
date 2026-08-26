@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom'; // <-- Import useLocation
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
@@ -8,11 +8,11 @@ export default function Login() {
   const [error, setError] = useState('');
   
   const navigate = useNavigate();
-  const location = useLocation(); // <-- Get the location object
+  const location = useLocation();
   const { login } = useAuth();
 
-  // 1. Check if they came from a protected route. If not, default to dashboard.
-  const from = location.state?.from?.pathname || '/app/dashboard';
+  // 1. FIXED: Redirect to /app/tickets to match App.jsx and the Playwright test
+  const from = location.state?.from?.pathname || '/app/tickets';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,7 +21,6 @@ export default function Login() {
     const success = await login(email, password);
     
     if (success) {
-      // 2. Redirect to their original destination instead of hardcoding '/app/dashboard'
       navigate(from, { replace: true });
     } else {
       setError('Invalid email or password. Is the Java backend running?');

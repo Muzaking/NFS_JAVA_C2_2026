@@ -1,6 +1,6 @@
 import { createContext, useState, useContext } from 'react';
 
-// 1. Create the context - ADDED 'export' HERE
+// 1. Create the context
 export const AuthContext = createContext(null);
 
 // 2. Create the Provider component
@@ -10,7 +10,8 @@ export function AuthProvider({ children }) {
 
   const login = async (email, password) => {
     try {
-      const response = await fetch('/api/auth/login', {
+      // FIXED: Added the full Spring Boot backend URL (assuming default port 8080)
+      const response = await fetch('http://localhost:8080/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
