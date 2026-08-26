@@ -1,32 +1,37 @@
-// src/components/TicketSummaryCards.test.jsx
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import TicketSummaryCards from './TicketSummaryCards';
-
-// We add an extra OPEN ticket here to test the math properly!
-const sampleTickets = [
-  { id: 'T001', title: 'Cannot access email', status: 'OPEN' },
-  { id: 'T002', title: 'Laptop running slowly', status: 'IN_PROGRESS' },
-  { id: 'T003', title: 'Password reset request', status: 'CLOSED' },
-  { id: 'T004', title: 'Server is down', status: 'OPEN' }
-];
+import React from 'react';
 
 describe('TicketSummaryCards Component', () => {
-  it('renders labels and exact calculations based on props', () => {
-    // 1. Render the component with our fake data
+  // 1. Create sample data
+  const sampleTickets = [
+    { id: 1, status: 'Open' },
+    { id: 2, status: 'Open' },
+    { id: 3, status: 'In Progress' },
+    { id: 4, status: 'Closed' },
+    { id: 5, status: 'Closed' },
+    { id: 6, status: 'Closed' },
+  ];
+
+  it('renders the correct headers and calculates the correct counts for each status', () => {
+    // 2. Render the component with the sample data
     render(<TicketSummaryCards tickets={sampleTickets} />);
 
-    // 2. Verify all the labels are physically present on the screen
+    // 3. Test that the specific text labels display correctly
     expect(screen.getByText('Total Tickets')).toBeInTheDocument();
     expect(screen.getByText('Open')).toBeInTheDocument();
     expect(screen.getByText('In Progress')).toBeInTheDocument();
     expect(screen.getByText('Closed')).toBeInTheDocument();
 
-    // 3. Verify the math is correct using our data-testids
-    // With our sample data, there should be 4 Total, 2 Open, 1 In Progress, 1 Closed
-    expect(screen.getByTestId('total-count')).toHaveTextContent('4');
-    expect(screen.getByTestId('open-count')).toHaveTextContent('2');
-    expect(screen.getByTestId('in-progress-count')).toHaveTextContent('1');
-    expect(screen.getByTestId('closed-count')).toHaveTextContent('1');
+    // 4. Test that the calculated numbers are correct based on the sample array
+    // Total should be 6
+    expect(screen.getByTestId('count-total')).toHaveTextContent('6');
+    // Open should be 2
+    expect(screen.getByTestId('count-open')).toHaveTextContent('2');
+    // In Progress should be 1
+    expect(screen.getByTestId('count-in-progress')).toHaveTextContent('1');
+    // Closed should be 3
+    expect(screen.getByTestId('count-closed')).toHaveTextContent('3');
   });
 });
