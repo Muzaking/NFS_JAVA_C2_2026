@@ -1,16 +1,14 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router';
-import App from './App.jsx';
-import { AuthProvider } from './context/AuthContext.jsx';
-import './styles.css';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom' // <-- Import this
+import App from './App.jsx'
+import './index.css'
 
-createRoot(document.getElementById('root')).render(
+ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+    {/* Wrap App inside BrowserRouter */}
     <BrowserRouter>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
+      <App />
     </BrowserRouter>
-  </React.StrictMode>
-);
+  </React.StrictMode>,
+)
