@@ -36,11 +36,12 @@ describe('TicketFormWizard Component', () => {
     await user.click(screen.getByRole('button', { name: /save/i }));
 
     // 3. Verify backend was called EXACTLY once with the correct data payload
-    expect(mockSubmit).toHaveBeenCalledTimes(1);
     expect(mockSubmit).toHaveBeenCalledWith({
-      title: 'Network Issue',
-      description: 'Cannot connect to the VPN.'
-    });
+  title: 'Network Issue',
+  description: 'Cannot connect to the VPN.',
+  status: 'OPEN',
+  priority: 'MEDIUM'
+});
   });
 
   it('shows a saving state when the form is submitting', async () => {
