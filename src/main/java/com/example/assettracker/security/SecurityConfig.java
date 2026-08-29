@@ -74,13 +74,13 @@ public class SecurityConfig {
             JwtAuthenticationConverter jwtAuthenticationConverter) throws Exception {
 
         http
-                .cors(Customizer.withDefaults()) // 1. Enabled CORS here
+                .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/api/health").permitAll()
-                        .requestMatchers("/api/readiness").permitAll()
+                        .requestMatchers("/api/readiness").permitAll() // Whitelisted readiness endpoint
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll() 
                         .requestMatchers("/api/docs/**").permitAll()
@@ -94,7 +94,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/v1/assets/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/assets/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/reports/**").hasAnyRole("USER", "ADMIN")
-                        // ADDED TICKET ENDPOINTS SO THEY REQUIRE AUTHENTICATION
                         .requestMatchers("/api/v1/tickets/**").authenticated() 
                         .anyRequest().authenticated()
                 )
@@ -152,23 +151,16 @@ public class SecurityConfig {
         return new SecretKeySpec(keyBytes, "HmacSHA256");
     }
 
-    // 2. Added the CORS configuration bean here
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         
-        // Allow the React frontend
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173")); 
-        
-        // Allow necessary HTTP methods
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        
-        // Allow headers including Authorization for the JWT token
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        // Apply this policy to all API endpoints
         source.registerCorsConfiguration("/**", configuration); 
         
         return source;
