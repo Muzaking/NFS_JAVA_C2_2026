@@ -1,4 +1,6 @@
+// src/components/TicketFormWizard.jsx
 import React, { useState } from 'react';
+import { validateTicketFormStep, normalizeTicketFormPayload } from '../utils/ticketFormValidation';
 
 export default function TicketFormWizard({ onSubmit }) {
   const [title, setTitle] = useState('');
@@ -9,22 +11,23 @@ export default function TicketFormWizard({ onSubmit }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // 1. Validation
-    const newErrors = {};
-    if (!title.trim()) newErrors.title = 'Title is required';
-    if (!description.trim()) newErrors.description = 'Description is required';
+    const formValues = { title, description };
+    
+    // 1. Validation (using extracted utility)
+    const newErrors = validateTicketFormStep(formValues);
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return; // Stop the form from submitting
     }
 
-    // 2. Submit payload
+    // 2. Submit payload (using extracted normalization utility)
     setErrors({});
     setIsSubmitting(true);
     
     try {
-      await onSubmit({ title, description });
+      const payload = normalizeTicketFormPayload(formValues);
+      await onSubmit(payload);
     } finally {
       setIsSubmitting(false); // Reset button state after submission
     }
