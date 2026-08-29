@@ -37,16 +37,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 
-<<<<<<< HEAD
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import jakarta.annotation.PostConstruct;
-import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.List;
 
-=======
->>>>>>> main
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
