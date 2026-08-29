@@ -1,13 +1,14 @@
 package com.example.assettracker.config;
 
-import com.example.assettracker.model.AppUser;
-import com.example.assettracker.repository.AppUserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.example.assettracker.model.AppUser;
+import com.example.assettracker.repository.AppUserRepository;
 
 @Configuration
 public class UserDataSeeder {
@@ -17,6 +18,7 @@ public class UserDataSeeder {
     @Bean
     CommandLineRunner seedUsers(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder) {
         return args -> {
+            // Seed Admin User
             createUserIfMissing(
                     appUserRepository,
                     passwordEncoder,
@@ -24,6 +26,16 @@ public class UserDataSeeder {
                     "admin@example.com",
                     "Admin@12345",
                     "ADMIN"
+            );
+
+            // Seed Standard User with a unique email to avoid database password conflicts
+            createUserIfMissing(
+                    appUserRepository,
+                    passwordEncoder,
+                    "Standard User",
+                    "testuser99@example.com",
+                    "User@12345",
+                    "USER"
             );
         };
     }

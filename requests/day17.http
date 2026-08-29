@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:8080
-@token = paste-token-here-after-login
+@token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlcjk5QGV4YW1wbGUuY29tIiwicm9sZSI6IlVTRVIiLCJpc3MiOiJhc3NldC10cmFja2VyLWFwaSIsIm5hbWUiOiJTdGFuZGFyZCBVc2VyIiwiZXhwIjoxNzg4MDMyMzE3LCJpYXQiOjE3ODgwMjg3MTcsInVzZXJJZCI6IjZhOTMyNzEyOTM2Y2MyYTAxMTZhODQ5ZCJ9._jI_djzK2uXj9n1qVIG4mefI0n4_mS81-4SV2TOJkoA
 
 ### 1. Health check
 GET {{baseUrl}}/api/health
@@ -10,13 +10,13 @@ GET {{baseUrl}}/api/readiness
 ### 3. Protected endpoint without token - should return 401
 GET {{baseUrl}}/api/v1/assets
 
-### 4. Login as admin
+### 4. Login as user
 POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "admin@example.com",
-  "password": "Admin@12345"
+  "email": "testuser99@example.com",
+  "password": "User@12345"
 }
 
 ### 5. Protected endpoint with token - should return 200
@@ -51,3 +51,18 @@ Content-Type: application/json
   "serialNumber": "DUPLICATE-SN-DAY17",
   "location": "Security Lab"
 }
+
+### 11. Trigger 403 Forbidden (Login as user, try to access admin route)
+# (Note: Temporarily change your login credentials in #4 to a standard user, grab the new token, paste it at the top, then run this)
+POST {{baseUrl}}/api/v1/assets
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "assetTag": "TEST-403",
+  "name": "Forbidden Asset"
+}
+
+### 12. Trigger 404 Not Found (Look for an ID that doesn't exist)
+GET {{baseUrl}}/api/v1/assets/999999999999999999999999
+Authorization: Bearer {{token}}
