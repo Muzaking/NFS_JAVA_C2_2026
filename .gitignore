@@ -1,3 +1,15 @@
+<<<<<<< HEAD
+target/
+.idea/
+*.iml
+*.log
+*.class
+*.jar
+.java-version
+.vscode/
+.DS_Store
+.env
+=======
 # =========================================================
 # Full-Stack Java + Spring Boot + React + MongoDB .gitignore
 # Suitable for Maven, Java 21, Spring Boot, React/Vite, testing,
@@ -226,3 +238,4 @@ out/
 .generated/
 generated/
 .java-version # jenv
+>>>>>>> day12
