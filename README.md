@@ -140,3 +140,9 @@ Every single backend endpoint that deals with sensitive data or state changes mu
 * **What is sanitisation?** Modifying or cleaning input data to make it safe and consistent (e.g., stripping hidden characters or trimming spaces) before validation.
 * **Give one example where input should be cleaned.** An asset tag with accidental trailing spaces and lowercase letters (e.g., `" lap-2026-4721 "`) should be cleaned to `"LAP-2026-4721"`.
 * **Give one example where input should be rejected.** A completely empty payload or missing required field (like `serialNumber`). This cannot be fixed by cleaning and must be rejected with a 400 Bad Request.
+
+## Day 18 Exercise 04 - Environment and Secrets
+**Why `.env` Should Never Be Committed**
+
+* **Security Risk:** Your `.env` file contains sensitive live credentials, database passwords, and cryptographic keys (like `APP_JWT_SECRET`). Committing this to Git permanently exposes your security keys to anyone with access to the repository.
+* **Environment Differences:** Environment variables are meant to change depending on where the code is running. Your local machine might need port `27018`, but the production server will likely use port `80` or `443`. Hardcoding state in version control causes conflicts between developer machines and deployment servers.
