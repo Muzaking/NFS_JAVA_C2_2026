@@ -1,0 +1,65 @@
+services:
+  mongo:
+    image: mongo:8
+    container_name: asset-tracker-mongo-lab
+    restart: unless-stopped
+    ports:
+      - "${MONGO_HOST_PORT:-27017}:27017"
+    volumes:
+      - mongo_lab_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  backend:
+    build:
+      # Fix 4: Adjusted path to reach the project root directory
+      context: ../../../
+      dockerfile: Dockerfile
+    container_name: asset-tracker-api-lab
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      # Fix 1: Changed localhost to 'mongo' and restored original custom variable SPRING_MONGODB_URI
+      SPRING_MONGODB_URI: mongodb://mongo:27017/asset_tracker_db
+      # Fix 2: Changed JWT_SECRET to APP_JWT_SECRET so Spring Boot maps it correctly
+      APP_JWT_SECRET: ${APP_JWT_SECRET}
+      APP_JWT_EXPIRATION_MINUTES: ${APP_JWT_EXPIRATION_MINUTES:-60}
+      SERVER_PORT: 8080
+    ports:
+      - "${BACKEND_PORT:-8080}:8080"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 45s
+
+  frontend:
+    build:
+      # Fix 4: Adjusted path to reach the frontend directory from the project root
+      context: ../../../frontend
+      dockerfile: Dockerfile
+    container_name: asset-tracker-ui-lab
+    restart: unless-stopped
+    depends_on:
+      # Fix 3: Changed 'api' to 'backend' to match the declared service name above
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    ports:
+      - "${FRONTEND_PORT:-5174}:80"
+
+volumes:
+  mongo_lab_data:

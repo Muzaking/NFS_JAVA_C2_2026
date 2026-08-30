@@ -146,3 +146,12 @@ Every single backend endpoint that deals with sensitive data or state changes mu
 
 * **Security Risk:** Your `.env` file contains sensitive live credentials, database passwords, and cryptographic keys (like `APP_JWT_SECRET`). Committing this to Git permanently exposes your security keys to anyone with access to the repository.
 * **Environment Differences:** Environment variables are meant to change depending on where the code is running. Your local machine might need port `27018`, but the production server will likely use port `80` or `443`. Hardcoding state in version control causes conflicts between developer machines and deployment servers.
+
+## Day 18 Exercise 05 - Broken Docker Compose Troubleshooting Lab
+Part E: Reflection Answers
+
+The difference between down and down -v: The standard down command stops and removes containers and networks but safely preserves your named volumes (and the data inside them). Adding the -v (volumes) flag deliberately destroys those named volumes alongside the containers.
+
+MongoDB data behavior: Containers are ephemeral by default, meaning any data written inside them disappears when the container is removed. The Compose volume acts as a persistent lifeline mapped to MongoDB's internal /data/db directory. When you remove the volume, that lifeline is severed, and the database is permanently erased.
+
+Using down -v before a demo: It guarantees a completely clean slate. Whether you are demonstrating a fresh installation of an application like SelfBorn or doing a final-year project presentation at Universiti Teknologi Malaysia, wiping the volume ensures no awkward leftover test entries or corrupted states leak into your live demo.
