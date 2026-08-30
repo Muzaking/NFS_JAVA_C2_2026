@@ -1,7 +1,7 @@
 services:
   mongo:
     image: mongo:8
-    container_name: asset-tracker-mongo
+    container_name: support-desk-mongo
     restart: unless-stopped
     # Use 27018 on the host to avoid conflict with a local MongoDB running on 27017.
     # Inside Docker Compose, the backend connects to mongo:27017.
@@ -20,14 +20,16 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: asset-tracker-api
+    image: support-desk-api:latest
+    container_name: support-desk-api
     restart: unless-stopped
     depends_on:
       mongo:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      SPRING_MONGODB_URI: mongodb://mongo:27017/asset_tracker_db
+      # Updated to match standard Spring Data property and the Support Desk database
+      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/support_desk_db
       APP_JWT_SECRET: ${APP_JWT_SECRET:?Set APP_JWT_SECRET in .env. Copy .env.example to .env first.}
       APP_JWT_EXPIRATION_MINUTES: ${APP_JWT_EXPIRATION_MINUTES:-60}
       SERVER_PORT: 8080
@@ -44,7 +46,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: asset-tracker-ui
+    image: support-desk-ui:latest
+    container_name: support-desk-ui
     restart: unless-stopped
     depends_on:
       backend:
