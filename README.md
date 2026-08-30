@@ -133,3 +133,10 @@ Frontend code runs entirely inside the user's browser, which means a malicious u
 
 Which backend endpoints still need to enforce security?
 Every single backend endpoint that deals with sensitive data or state changes must enforce security. This includes all API routes for fetching, creating, updating, or deleting Tickets, Reports, Users, and Assets. The backend must independently verify the JWT token on every single incoming request.
+
+
+## Day 17 Exercise 05 - Input Sanitisation
+* **What is validation?** Checking whether input data meets business rules, constraints, and structural requirements before processing. Invalid data is rejected.
+* **What is sanitisation?** Modifying or cleaning input data to make it safe and consistent (e.g., stripping hidden characters or trimming spaces) before validation.
+* **Give one example where input should be cleaned.** An asset tag with accidental trailing spaces and lowercase letters (e.g., `" lap-2026-4721 "`) should be cleaned to `"LAP-2026-4721"`.
+* **Give one example where input should be rejected.** A completely empty payload or missing required field (like `serialNumber`). This cannot be fixed by cleaning and must be rejected with a 400 Bad Request.

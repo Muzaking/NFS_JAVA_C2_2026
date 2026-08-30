@@ -10,6 +10,7 @@ import com.example.assettracker.dto.TicketResponse;
 import com.example.assettracker.dto.UpdateTicketRequest;
 import com.example.assettracker.model.Ticket; 
 import com.example.assettracker.repository.TicketRepository;
+import com.example.assettracker.util.InputSanitizer; // Imported the new utility class
 
 @Service
 public class TicketService {
@@ -47,10 +48,10 @@ public class TicketService {
 
     public TicketResponse createTicket(CreateTicketRequest request) {
         Ticket ticket = new Ticket();
-        // REFACTORED: Using normalization helpers
-        ticket.setTitle(normalizeRequired(request.getTitle()));
-        ticket.setDescription(normalizeRequired(request.getDescription()));
-        ticket.setCategory(normalizeRequired(request.getCategory()));
+        // REFACTORED: Using InputSanitizer via helpers
+        ticket.setTitle(normalizeText(request.getTitle()));
+        ticket.setDescription(normalizeText(request.getDescription()));
+        ticket.setCategory(normalizeText(request.getCategory()));
         ticket.setPriority(normalizePriority(request.getPriority()));
         ticket.setStatus(normalizeStatus(request.getStatus()));
 
@@ -62,9 +63,9 @@ public class TicketService {
         // REFACTORED: Using helper method
         Ticket ticket = findTicketOrThrow(id);
 
-        ticket.setTitle(normalizeRequired(request.getTitle()));
-        ticket.setDescription(normalizeRequired(request.getDescription()));
-        ticket.setCategory(normalizeRequired(request.getCategory()));
+        ticket.setTitle(normalizeText(request.getTitle()));
+        ticket.setDescription(normalizeText(request.getDescription()));
+        ticket.setCategory(normalizeText(request.getCategory()));
         ticket.setPriority(normalizePriority(request.getPriority()));
         ticket.setStatus(normalizeStatus(request.getStatus()));
 
@@ -79,18 +80,20 @@ public class TicketService {
                 .orElseThrow(() -> new RuntimeException("Ticket not found with id: " + id));
     }
 
-    private String normalizeRequired(String value) {
-        return (value != null) ? value.trim() : null;
+    private String normalizeText(String value) {
+        // Uses the new utility class to strip control chars and trim spaces
+        return InputSanitizer.cleanText(value);
     }
 
     private String normalizeStatus(String status) {
-        if (status == null || status.trim().isEmpty()) return "OPEN";
-        return status.trim().toUpperCase();
+        // Uses the new utility class to clean and uppercase code-like fields
+        String cleaned = InputSanitizer.upperCode(status);
+        return (cleaned == null) ? "OPEN" : cleaned;
     }
 
     private String normalizePriority(String priority) {
-        if (priority == null || priority.trim().isEmpty()) return "MEDIUM";
-        return priority.trim().toUpperCase();
+        String cleaned = InputSanitizer.upperCode(priority);
+        return (cleaned == null) ? "MEDIUM" : cleaned;
     }
 
     private TicketResponse mapToResponse(Ticket ticket) {

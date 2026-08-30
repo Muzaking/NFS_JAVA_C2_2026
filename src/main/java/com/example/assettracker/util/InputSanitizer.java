@@ -1,4 +1,5 @@
 package com.example.assettracker.util;
+
 /*
 Validation: what inputs are allowed and what are not
 
@@ -9,6 +10,7 @@ empty serialNumber -> reject
 script tags in name -> reject do not render as HTML
 */
 public class InputSanitizer {
+    
     private InputSanitizer() {
         // Private constructor to prevent instantiation
     }
@@ -26,13 +28,12 @@ public class InputSanitizer {
         if (trimmedValue == null) {
             return null;
         }
-        // Remove leading and trailing whitespace
         
         return trimmedValue
+            .replaceAll("[\\p{Cntrl}]", "") // Corrected regex to remove control characters
             .replaceAll("[^\\p{L}\\p{N}\\s\\-]", "")  // Remove special characters except letters, numbers, spaces, and hyphens
-            .replaceAll("\\{Cntrl\\}", "")  // Remove control characters
             .replaceAll("\\s+", " ")  // Replace multiple spaces with a single space
-        ;
+            .trim(); // Final trim in case space replacements pushed a space to the edge
     }
 
     public static String upperCode(String value) {
