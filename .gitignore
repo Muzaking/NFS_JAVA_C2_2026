@@ -1,15 +1,3 @@
-<<<<<<< HEAD
-target/
-.idea/
-*.iml
-*.log
-*.class
-*.jar
-.java-version
-.vscode/
-.DS_Store
-.env
-=======
 # =========================================================
 # Full-Stack Java + Spring Boot + React + MongoDB .gitignore
 # Suitable for Maven, Java 21, Spring Boot, React/Vite, testing,
@@ -155,7 +143,6 @@ jacoco.exec
 # VS Code Java / language server
 # ---------------------------------------------------------
 bin/
-.settings/
 .metadata/
 
 # ---------------------------------------------------------
@@ -170,11 +157,9 @@ pnpm-debug.log*
 
 # React / Vite build outputs
 dist/
-build/
 .vite/
 
 # Frontend coverage and cache
-coverage/
 .nyc_output/
 .cache/
 .parcel-cache/
@@ -219,7 +204,6 @@ compose.override.yml
 *.swp
 *.swo
 *~
-.cache/
 tmp/
 temp/
 
@@ -238,4 +222,3 @@ out/
 .generated/
 generated/
 .java-version # jenv
->>>>>>> day12
