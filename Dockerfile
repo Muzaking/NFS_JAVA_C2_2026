@@ -20,6 +20,9 @@ FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
 
+# Install curl for the HEALTHCHECK since alpine does not include it by default
+RUN apk add --no-cache curl
+
 # Safe defaults only. 
 ENV SERVER_PORT=8080
 ENV JAVA_OPTS=""
@@ -28,8 +31,9 @@ COPY --from=build /workspace/app.jar app.jar
 
 EXPOSE 8080
 
-# /api/health
-HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries= \
+# Replaced the missing retries value with 3. 
+# Note: If your endpoint is actually /api/readiness (from Exercise 2), update the URL below.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8080/api/health || exit 1
 
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
